@@ -1,17 +1,16 @@
 #include "cub3d.h"
 
-void    init_game(t_game *cub3d)
-{
-    cub3d->mlx = mlx_init(); // Should be protected?
-    cub3d->window = mlx_new_window(cub3d->mlx, 1280, 720, "Cub3D TEST");
-    cub3d->image = mlx_new_image(cub3d->mlx, 1280, 720);
-}
-
 int main(void)
 {
-    t_game  cub3d;
+	t_game  cub3d;
 
-    init_game(&cub3d);
-    mlx_loop(cub3d.mlx);
-    return 0;
+	if (!init_game(&cub3d))
+	{
+		write_error("Failed to initialize game");
+		return (EXIT_FAILURE);
+	}
+
+	mlx_loop(cub3d.mlx);
+	cleanup_game(&cub3d);
+	return (EXIT_SUCCESS);
 }
