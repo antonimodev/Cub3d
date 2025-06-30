@@ -12,8 +12,3 @@ void	write_error(const char *message)
     }
     write(2, "\n", 1);
 }
-
-void	print_mlx_error(const char *message)
-{
-    write_error(message);
-}

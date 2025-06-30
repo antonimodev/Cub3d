@@ -1,0 +1,70 @@
+# CUB3D TODO - Error Handling & Features
+
+Symbols: ❓ ✅
+
+## 📁 FILE VALIDATION
+- Check file permissions (readable)
+- Handle empty files
+- Check file extension (.cub)
+- Handle files that are directories
+- Errors when reading file
+
+## 🗺️ MAP PARSING
+- Invalid characters in map (not 0,1,N,S,E,W, space)
+- Missing player starting position
+- Multiple player starting positions
+- Player not surrounded by walls (map not closed)
+- Empty lines in middle of map
+- Invalid map format (not rectangular grid)
+- Map too small (minimum size requirements)
+- Missing walls around map borders
+- Tabs vs spaces handling in map
+
+## 🎨 TEXTURE & COLOR VALIDATION
+- Missing texture identifiers (NO, SO, WE, EA)
+- Duplicate texture identifiers
+- Invalid texture file paths
+- Texture files don't exist or unreadable
+- Invalid image formats for textures
+- Missing color identifiers (F, C)
+- Duplicate color identifiers
+- Invalid RGB values (not 0-255) ❓
+- Invalid color format (not R,G,B)
+- Extra characters after valid identifiers
+
+## 🖥️ MLX & GRAPHICS ERRORS
+- MLX initialization failure ✅
+- Window creation failure ✅
+- Image creation failure ✅
+- Display connection issues
+- Memory allocation for graphics
+- Texture loading failures
+
+## 💾 MEMORY MANAGEMENT
+- Free all allocated memory on exit
+- Clean up MLX resources properly
+- Handle partial initialization failures
+
+## 🎮 RUNTIME ERRORS
+- Invalid window close events
+- Key press handling errors
+- Mouse events (if implemented)
+- Window resize handling
+- Invalid player movements (through walls)
+
+## 📝 INPUT VALIDATION
+- Wrong number of command line arguments ✅
+
+## 🚪 EXIT CONDITIONS
+- Proper cleanup on ESC key
+- Proper cleanup on window close (X button)
+- Proper cleanup on errors
+- Exit with correct error codes
+
+## 🔍 EDGE CASES
+- Very large maps
+- Maps with unusual shapes
+- Files with Windows/Mac line endings
+- Unicode characters in files
+- Very long file paths
+- Symbolic links to files

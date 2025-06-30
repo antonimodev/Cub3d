@@ -23,6 +23,8 @@ INC         = -Iinclude -I$(MLX_DIR)
 SRC = src/main.c \
       src/init_game.c \
       src/error.c \
+	  src/arg_validation.c \
+	  src/parsing.c \
 
 OBJ_DIR = Cub3d_OBJ
 OBJ = $(SRC:src/%.c=$(OBJ_DIR)/%.o)

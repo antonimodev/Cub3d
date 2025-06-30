@@ -1,15 +1,19 @@
 #include "cub3d.h"
 
-int main(void)
+int main(int ac, char **av)
 {
 	t_game  cub3d;
-
+	
+	ft_memset(&cub3d, 0, sizeof(t_game)); // Initializing game structure
+	if (!validate_args(ac, av))
+		return (EXIT_FAILURE);
+	if (!parsing(av))
+		return (EXIT_FAILURE);
 	if (!init_game(&cub3d))
 	{
 		write_error("Failed to initialize game");
 		return (EXIT_FAILURE);
 	}
-
 	mlx_loop(cub3d.mlx);
 	cleanup_game(&cub3d);
 	return (EXIT_SUCCESS);

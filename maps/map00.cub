@@ -1,0 +1,22 @@
+FORMAT:
+
+NO - North texture path -> ./images/wall_n.png
+SO - South texture path -> ./images/wall_s.png
+EA - East texture path -> ./images/wall_e.png
+WE - West texture path -> ./images/wall_w.png
+
+F - Floor color [RGB FORMAT] -> 220,100,0
+C - Ceiling color [RGB FORMAT] -> 220,100,0
+
+MAP - EXAMPLE:
+
+111111
+100101
+100001
+1100N1
+111111
+
+# 0 Empty space
+# 1 Wall
+# N, S, E, W for the player start position and spawning orientation.
+# Map MUST BE CLOSED by walls.
