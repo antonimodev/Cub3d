@@ -17,6 +17,21 @@
 #define WIDTH 1280
 #define HEIGHT 720
 
+/* ENUMS */
+typedef enum e_texture_type
+{
+    TEXTURE_NORTH,
+    TEXTURE_SOUTH,
+    TEXTURE_EAST,
+    TEXTURE_WEST
+} t_texture_type;
+
+typedef enum e_color_type
+{
+    COLOR_FLOOR,
+    COLOR_CEILING
+} t_color_type;
+
 /* STRUCTURES */
 
 typedef struct s_game
@@ -40,6 +55,8 @@ typedef struct s_game_colors
 {
 	t_colors	floor; // Floor color
 	t_colors	ceiling; // Ceiling color
+	bool		floor_set; // Flag to track if floor color is set
+	bool		ceiling_set; // Flag to track if ceiling color is set
 } t_game_colors;
 
 typedef struct s_colors // Testing about store colors
@@ -51,7 +68,7 @@ typedef struct s_colors // Testing about store colors
 
 /* SRC */
 
-/* ---------- INIT_GAME.C (5) ----------*/
+/* ---------- INIT_GAME.C (5) ---------- */
 
 /**
  * Initializes the game by setting up the MiniLibX, creating a window, and an image.
@@ -62,7 +79,7 @@ typedef struct s_colors // Testing about store colors
 bool    init_game(t_game *cub3d); // Initialize game parameters
 void    cleanup_game(t_game *cub3d); // Clean up resources
 
-/* ---------- ERROR.C (1) ----------*/
+/* ---------- ERROR.C (1) ---------- */
 
 /**
  * Writes an error message to the standard error output.
@@ -70,8 +87,102 @@ void    cleanup_game(t_game *cub3d); // Clean up resources
  */
 void    write_error(const char *message);
 
-/* ---------- PARSING.C (?) ---------- */
+/* ---------- MAIN_PARSE.C (3) ---------- */
 
+/**
+ * Parses the .cub file and fills the game structure with texture paths, colors, and map data.
+ * @param av Command line arguments
+ * @param cub3d Pointer to the game structure to fill
+ * @return true if parsing is successful, false otherwise
+ */
+bool    parsing(char **av, t_game *cub3d);
+
+/**
+ * Processes each line of the .cub file and extracts relevant data.
+ * @param fd Pointer to the file descriptor of the .cub file
+ * @param cub3d Pointer to the game structure to fill
+ * @return true if line processing is successful, false otherwise
+ */
+bool    parse_line(int *fd, t_game *cub3d);
+
+/**
+ * Processes each line of the .cub file and extracts relevant data.
+ * @param line The line to process
+ * @param cub3d Pointer to the game structure to fill
+ * @return true if line processing is successful, false otherwise
+ */
+bool    get_data_from_line(char *line, t_game *cub3d);
+
+/**
+ * Validates that all required parsing elements are complete and properly set.
+ * @param cub3d Pointer to the game structure to validate
+ * @return true if all required elements are present, false otherwise
+ */
+bool	validate_assigned_params(t_game *cub3d);
+
+
+/* ---------- PARSE_COLOR.C (2) ---------- */
+
+/**
+ * Processes color lines (F, C).
+ * @param line The line containing color information
+ * @param cub3d Pointer to the game structure to fill
+ * @return true if color processing is successful, false otherwise
+ */
+bool    get_color(char *line, t_game *cub3d);
+
+/**
+ * Processes color lines (F, C).
+ * @param line The line containing color information
+ * @param prefix The prefix to identify the color type (F or C)
+ * @param type The type of color (FLOOR or CEILING)
+ * @param cub3d Pointer to the game structure to fill
+ * @return true if color processing is successful, false otherwise
+ */
+bool	process_color_line(char *line, const char *prefix, t_color_type type, t_game *cub3d);
+
+
+/* ---------- COLOR_STORAGE.C (4) ---------- */
+
+/**
+ * Validates and stores the color values in the game structure.
+ * @param color_values Array of color values (R, G, B)
+ * @param type The type of color (FLOOR or CEILING)
+ * @param cub3d Pointer to the game structure to fill
+ * @return true if color values are valid and stored successfully, false otherwise
+ */
+bool	validate_and_store_color(char **color_values, t_color_type type, t_game *cub3d);
+
+/* ---------- PARSE_TEXTURE.C (2) ---------- */
+
+/**
+ * Processes texture path lines (NO, SO, EA, WE).
+ * @param line The line containing texture information
+ * @param cub3d Pointer to the game structure to fill
+ * @return true if texture processing is successful, false otherwise
+ */
+bool    get_texture_path(char *line, t_game *cub3d);
+
+/**
+ * Processes texture path lines (NO, SO, EA, WE).
+ * @param line The line containing texture information
+ * @param prefix The prefix to identify the texture type (NO, SO, EA, WE)
+ * @param type The type of texture (NORTH, SOUTH, EAST, WEST)
+ * @param cub3d Pointer to the game structure to fill
+ * @return true if texture processing is successful, false otherwise
+ */
+bool    process_texture_line(char *line, const char *prefix, t_texture_type type, t_game *cub3d);
+
+/* ---------- TEXTURE_STORAGE.C (5) ---------- */
+
+/**
+ * Stores the texture path in the game structure based on the texture type.
+ * @param path The path to the texture
+ * @param type The type of texture (NORTH, SOUTH, EAST, WEST)
+ * @param cub3d Pointer to the game structure to fill
+ * @return true if stored successfully, false if duplicate found
+ */
+bool	store_texture_path(const char *path, t_texture_type type, t_game *cub3d);
 
 /* ---------- ARG_VALIDATION.C (4) ---------- */
 
