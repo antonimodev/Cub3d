@@ -17,12 +17,37 @@
 #define WIDTH 1280
 #define HEIGHT 720
 
+/* STRUCTURES */
+
 typedef struct s_game
 {
-    void    *mlx;
-    void    *window;
-    void    *image;
+    void			*mlx;
+    void			*window;
+    void			*image;
+    t_textures  	texture_paths;
+	t_game_colors	colors;
 } t_game;
+
+typedef struct s_textures // Testing about store texture paths
+{
+    char    *no; // North texture path
+    char    *so; // South texture path
+    char    *we; // West texture path
+    char    *ea; // East texture path
+} t_textures;
+
+typedef struct s_game_colors
+{
+	t_colors	floor; // Floor color
+	t_colors	ceiling; // Ceiling color
+} t_game_colors;
+
+typedef struct s_colors // Testing about store colors
+{
+	int	red;
+	int	green;
+	int	blue;
+} t_colors;
 
 /* SRC */
 

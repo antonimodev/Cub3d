@@ -7,7 +7,7 @@ int main(int ac, char **av)
 	ft_memset(&cub3d, 0, sizeof(t_game)); // Initializing game structure
 	if (!validate_args(ac, av))
 		return (EXIT_FAILURE);
-	if (!parsing(av))
+	if (!parsing(av)) // Use &cub3d as parameter to store textures and other data?
 		return (EXIT_FAILURE);
 	if (!init_game(&cub3d))
 	{
