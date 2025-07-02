@@ -13,9 +13,17 @@
 #include <stdbool.h>    // For bool, true, false
 #include "mlx.h"        // For MiniLibX functions
 
+
+
+
+
 /* DEFINES */
 #define WIDTH 1280
 #define HEIGHT 720
+
+
+
+
 
 /* ENUMS */
 typedef enum e_texture_type
@@ -32,6 +40,10 @@ typedef enum e_color_type
     COLOR_CEILING
 } t_color_type;
 
+
+
+
+
 /* STRUCTURES */
 
 typedef struct s_game
@@ -41,6 +53,7 @@ typedef struct s_game
     void			*image;
     t_textures  	texture_paths;
 	t_game_colors	colors;
+    t_map       	map;
 } t_game;
 
 typedef struct s_textures // Testing about store texture paths
@@ -65,6 +78,16 @@ typedef struct s_colors // Testing about store colors
 	int	green;
 	int	blue;
 } t_colors;
+
+
+typedef struct s_map
+{
+    char    **map;
+    bool    map_started; // Flag to indicate if the map has started
+} t_map;
+
+
+
 
 /* SRC */
 
