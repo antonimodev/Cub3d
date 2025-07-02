@@ -54,7 +54,14 @@ typedef struct s_game
     t_textures  	texture_paths;
 	t_game_colors	colors;
     t_map       	map;
+    t_player_pos    player_pos; // Player position in the map
 } t_game;
+
+typedef struct s_player_pos
+{
+    int x;
+    int y;
+} t_player_pos;
 
 typedef struct s_textures // Testing about store texture paths
 {
