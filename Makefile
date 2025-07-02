@@ -25,11 +25,15 @@ SRC = src/main.c \
       src/init_game.c \
 	  \
       src/parsing/main_parse.c \
-      src/parsing/parse_color.c \
-      src/parsing/parse_map.c \
-      src/parsing/parse_texture.c \
-	  src/parsing/texture_storage.c \
-	  src/parsing/color_storage.c \
+      src/parsing/color/parse_color.c \
+	  src/parsing/color/color_storage.c \
+	  \
+      src/parsing/map/map_flood_fill.c \
+      src/parsing/map/map_storage.c \
+      src/parsing/map/map_validation.c \
+	  \
+      src/parsing/texture/parse_texture.c \
+	  src/parsing/texture/texture_storage.c \
 
 OBJ = $(SRC:.c=.o)
 

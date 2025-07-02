@@ -1,10 +1,5 @@
 #include "cub3d.h"
 
-// Get each line of .cub file
-// Check if each line is valid
-// Store the data in the game structure
-// Return true if parsing is successful, false otherwise
-
 bool    parsing(char **av, t_game *cub3d)
 {
     int     fd;
@@ -76,54 +71,7 @@ bool	validate_complete_map(t_game *cub3d)
 	}
 	if (!find_and_validate_player(cub3d))
 		return (false); // If player is not found or multiple players are found
-	// Check map enclosed by walls
-}
-
-
-/* --- MAP PARSING --- */
-
-/*
- * Validate enclosed walls through flood fill algorithm.
- */
-
-bool	find_and_validate_player(t_game *cub3d)
-{
-	int	x_pos;
-
-	x_pos = 0;
-	while (cub3d->map.map[x_pos])
-	{
-		if (!validate_one_player(cub3d, x_pos, 0))
-			return (false);
-		x_pos++;
-	}
-	if (!cub3d->player_pos.x && !cub3d->player_pos.y)
-	{
-		write_error("Error\nNo player found in map");
-		return (false);
-	}
-	return (true);
-}
-
-bool	validate_one_player(t_game *cub3d, int x, int y)
-{
-	while (cub3d->map.map[x][y])
-	{
-		if (cub3d->map.map[x][y] == 'N' || cub3d->map.map[x][y] == 'S'
-			|| cub3d->map.map[x][y] == 'E' || cub3d->map.map[x][y] == 'W')
-		{
-			if (!cub3d->player_pos.x && !cub3d->player_pos.y)
-			{
-				cub3d->player_pos.x = x;
-				cub3d->player_pos.y = y;
-			}
-			else
-			{
-				write_error("Error\nMap contains more than one player");
-				return (false);
-			}
-		}
-		y++;
-	}
+	if (!validate_map_enclosed(cub3d))
+		return (false); // If walls are not enclosed
 	return (true);
 }

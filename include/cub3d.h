@@ -95,8 +95,35 @@ typedef struct s_map
 
 
 
-
 /* SRC */
+
+
+/* ---------- ARG_VALIDATION.C (4) ---------- */
+
+/**
+ * Validates command line arguments for the Cub3D game.
+ * Checks if the number of arguments is correct, if the file has a valid extension,
+ * and if the file can be accessed.
+ * @param ac Argument count
+ * @param av Matrix of arguments
+ * @return true if arguments are valid, false otherwise
+ */
+bool    validate_args(int ac, char **av); // Validate command line arguments
+
+/**
+ * Checks if the file exists and can be opened for reading.
+ * @param filename Name of the file to validate
+ * @return true if file can be accessed, false otherwise
+ */
+bool	validate_file_access(const char *filename); // Check if the file can be accessed
+
+/* ---------- ERROR.C (1) ---------- */
+
+/**
+ * Writes an error message to the standard error output.
+ * @param message The error message to write
+ */
+void    write_error(const char *message);
 
 /* ---------- INIT_GAME.C (5) ---------- */
 
@@ -109,15 +136,12 @@ typedef struct s_map
 bool    init_game(t_game *cub3d); // Initialize game parameters
 void    cleanup_game(t_game *cub3d); // Clean up resources
 
-/* ---------- ERROR.C (1) ---------- */
 
-/**
- * Writes an error message to the standard error output.
- * @param message The error message to write
- */
-void    write_error(const char *message);
 
-/* ---------- MAIN_PARSE.C (3) ---------- */
+/* PARSING */
+
+
+/* ---------- MAIN_PARSE.C (5) ---------- */
 
 /**
  * Parses the .cub file and fills the game structure with texture paths, colors, and map data.
@@ -149,6 +173,18 @@ bool    get_data_from_line(char *line, t_game *cub3d);
  * @return true if all required elements are present, false otherwise
  */
 bool	validate_assigned_params(t_game *cub3d);
+
+/**
+ * Validates that the map is complete and properly enclosed.
+ * Checks if the map has a player, if it is enclosed by walls, and if it contains valid characters.
+ * @param cub3d Pointer to the game structure to validate
+ * @return true if the map is valid, false otherwise
+ */
+bool	validate_complete_map(t_game *cub3d);
+
+
+
+/* COLOR */
 
 
 /* ---------- PARSE_COLOR.C (2) ---------- */
@@ -183,6 +219,57 @@ bool	process_color_line(char *line, const char *prefix, t_color_type type, t_gam
  */
 bool	validate_and_store_color(char **color_values, t_color_type type, t_game *cub3d);
 
+
+
+/* MAP */
+
+
+/* ---------- MAP_FLOOD_FILL.C (1) ---------- */
+
+/**
+ * Validates if the map is properly enclosed using flood fill algorithm.
+ * It checks if all spaces are reachable from the player's position and if the map is surrounded by walls.
+ * @param x The x-coordinate of the starting position
+ * @param y The y-coordinate of the starting position
+ * @param map The map to validate
+ * @return true if the map is properly enclosed, false otherwise
+ */
+bool    validate_flood_fill(int x, int y, char **map);
+
+/* ---------- MAP_STORAGE.C (3) ---------- */
+
+/**
+ * Processes map lines and stores them in the game structure.
+ * It checks if the map has started, validates characters, and appends lines to the map.
+ * @param line The line to process
+ * @param cub3d Pointer to the game structure to fill
+ * @return true if map processing is successful, false otherwise
+ */
+bool	get_map_data(char *line, t_game *cub3d);
+
+
+/* ---------- MAP_VALIDATION.C (3) ---------- */
+
+/**
+ * Validates that the map is complete and properly enclosed using flood fill algorithm.
+ * @param cub3d Pointer to the game structure to validate
+ * @return true if the map is valid, false otherwise
+ */
+bool	validate_map_enclosed(t_game *cub3d);
+
+/**
+ * Validates that the map contains exactly one player character (N, S, E, W).
+ * It checks if the player character is found and if there are no duplicates.
+ * @param cub3d Pointer to the game structure to validate
+ * @return true if the player is found and valid, false otherwise
+ */
+bool	find_and_validate_player(t_game *cub3d);
+
+
+/* TEXTURE */
+
+
+
 /* ---------- PARSE_TEXTURE.C (2) ---------- */
 
 /**
@@ -213,24 +300,5 @@ bool    process_texture_line(char *line, const char *prefix, t_texture_type type
  * @return true if stored successfully, false if duplicate found
  */
 bool	store_texture_path(const char *path, t_texture_type type, t_game *cub3d);
-
-/* ---------- ARG_VALIDATION.C (4) ---------- */
-
-/**
- * Validates command line arguments for the Cub3D game.
- * Checks if the number of arguments is correct, if the file has a valid extension,
- * and if the file can be accessed.
- * @param ac Argument count
- * @param av Matrix of arguments
- * @return true if arguments are valid, false otherwise
- */
-bool    validate_args(int ac, char **av); // Validate command line arguments
-
-/**
- * Checks if the file exists and can be opened for reading.
- * @param filename Name of the file to validate
- * @return true if file can be accessed, false otherwise
- */
-bool	validate_file_access(const char *filename); // Check if the file can be accessed
 
 #endif
