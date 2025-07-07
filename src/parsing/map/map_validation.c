@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map_validation.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 11:44:48 by antonimo          #+#    #+#             */
+/*   Updated: 2025/07/07 13:48:42 by antonimo         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 bool	validate_complete_map(t_game *cub3d)
 {
 	if (!cub3d->map.map || !cub3d->map.map[0])
 	{
-		write_error("Error\nMap is empty or not defined.\n");
+		write_error("Map is empty or not defined.\n");
 		return (false);
 	}
 	if (!find_and_validate_player(cub3d))
@@ -28,7 +40,7 @@ static bool	validate_one_player(t_game *cub3d, int x, int y)
 			}
 			else
 			{
-				write_error("Error\nMap contains more than one player");
+				write_error("Map contains more than one player");
 				return (false);
 			}
 		}
@@ -50,7 +62,7 @@ bool	find_and_validate_player(t_game *cub3d)
 	}
 	if (!cub3d->player_pos.x && !cub3d->player_pos.y)
 	{
-		write_error("Error\nNo player found in map");
+		write_error("No player found in map");
 		return (false);
 	}
 	return (true);
@@ -64,12 +76,10 @@ bool	validate_map_enclosed(t_game *cub3d)
 	map_copy = matrix_cpy(cub3d->map.map, 0);
 	if (!map_copy)
 		return (false);
-	
-	result = validate_flood_fill(cub3d->player_pos.x, cub3d->player_pos.y, map_copy);
+	result = validate_flood_fill(cub3d->player_pos.x,
+			cub3d->player_pos.y, map_copy);
 	free_matrix(map_copy);
-	
 	if (!result)
-		write_error("Error\nMap is not properly enclosed by walls");
-	
+		write_error("Map is not properly enclosed by walls");
 	return (result);
 }

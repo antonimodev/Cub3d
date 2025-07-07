@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_color.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 11:45:07 by antonimo          #+#    #+#             */
+/*   Updated: 2025/07/07 13:48:32 by antonimo         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 bool	get_color(char *line, t_game *cub3d)
@@ -9,7 +21,8 @@ bool	get_color(char *line, t_game *cub3d)
 	return (true);
 }
 
-bool	process_color_line(char *line, const char *prefix, t_color_type type, t_game *cub3d)
+bool	process_color_line(char *line, const char *prefix, t_color_type type,
+	t_game *cub3d)
 {
 	char	*clean_color;
 	char	**color_values;
@@ -17,7 +30,7 @@ bool	process_color_line(char *line, const char *prefix, t_color_type type, t_gam
 	clean_color = ft_strtrim(line + ft_strlen(prefix), " \n\t");
 	if (!clean_color || ft_strlen(clean_color) == 0)
 	{
-		write_error("Error\nEmpty color value\n");
+		write_error("Empty color value\n");
 		free(clean_color);
 		return (false);
 	}
@@ -25,7 +38,7 @@ bool	process_color_line(char *line, const char *prefix, t_color_type type, t_gam
 	free(clean_color);
 	if (!color_values || matrix_len(color_values) != 3)
 	{
-		write_error("Error\nInvalid color format. Expected R,G,B\n");
+		write_error("Invalid color format. Expected R,G,B\n");
 		free_matrix(color_values);
 		return (false);
 	}

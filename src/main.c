@@ -1,13 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 10:53:33 by antonimo          #+#    #+#             */
+/*   Updated: 2025/07/07 13:35:13 by antonimo         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
-	t_game  cub3d;
-	
-	ft_memset(&cub3d, 0, sizeof(t_game)); // Initializing game structure
+	t_game	cub3d;
+
+	ft_memset(&cub3d, 0, sizeof(t_game));
 	if (!validate_args(ac, av))
 		return (EXIT_FAILURE);
-	if (!parsing(av, &cub3d)) // Use &cub3d as parameter to store textures and other data
+	if (!parsing(av, &cub3d))
 		return (EXIT_FAILURE);
 	if (!init_game(&cub3d))
 	{

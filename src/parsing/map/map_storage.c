@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map_storage.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 11:44:33 by antonimo          #+#    #+#             */
+/*   Updated: 2025/07/07 12:55:54 by antonimo         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 static bool	validate_map_chr(char *line)
@@ -7,9 +19,9 @@ static bool	validate_map_chr(char *line)
 	i = 0;
 	while (line[i])
 	{
-		if (line[i] != ' ' && line[i] != '1' && line[i] != '0' &&
-			line[i] != 'N' && line[i] != 'S' && line[i] != 'E' &&
-			line[i] != 'W')
+		if (line[i] != ' ' && line[i] != '1' && line[i] != '0'
+			&& line[i] != 'N' && line[i] != 'S' && line[i] != 'E'
+			&& line[i] != 'W')
 			return (false);
 		i++;
 	}
@@ -28,7 +40,7 @@ static bool	store_map_line(char *line, t_game *cub3d)
 	cub3d->map.map = matrix_append(cub3d->map.map, line);
 	if (!cub3d->map.map)
 		return (false);
-    free(line);
+	free(line);
 	return (true);
 }
 
@@ -44,7 +56,7 @@ bool	get_map_data(char *line, t_game *cub3d)
 		free(trimmed);
 		if (cub3d->map.map_started)
 		{
-			write_error("Error\nEmpty line found within map");
+			write_error("Empty line found within map");
 			return (false);
 		}
 		return (true);
@@ -54,7 +66,7 @@ bool	get_map_data(char *line, t_game *cub3d)
 	free(trimmed);
 	if (cub3d->map.map_started)
 	{
-		write_error("Error\nInvalid content after map started");
+		write_error("Invalid content after map started");
 		return (false);
 	}
 	return (true);

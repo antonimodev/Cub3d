@@ -59,3 +59,15 @@ Symbols: ❓ ✅
 - Very large maps ❓
 - Maps with unusual shapes ❓
 - Unicode characters in files ❓
+
+---
+
+This repo has submoodules added, so we must init with
+* git submodule init
+* git submodule update
+
+SUBMODULES ADDED: minilib_linux, libft
+
+---
+
+Keyword to test code: TESTING
