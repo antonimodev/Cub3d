@@ -6,7 +6,7 @@
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 10:52:43 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/07 13:16:11 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/08 14:02:23 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,14 @@ bool	validate_file_access(const char *filename)
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
 	{
-		write_error("File cannot be opened or doesn't exist");
+		write_error("File cannot be opened or doesn't exist.");
+		return (false);
+	}
+	close(fd);
+	fd = open(filename, __O_DIRECTORY);
+	if (fd != 1)
+	{
+		write_error("File not valid, is a directory.");
 		return (false);
 	}
 	close(fd);

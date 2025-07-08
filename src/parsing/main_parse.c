@@ -6,7 +6,7 @@
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 11:41:04 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/07 13:42:00 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/08 11:21:24 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,14 @@ bool	parsing(char **av, t_game *cub3d)
 	int	fd;
 
 	fd = open(av[1], O_RDONLY);
-	return (parse_line(&fd, cub3d));
+	if (!parse_line(&fd, cub3d))
+	{
+		cleanup_game(cub3d);
+		close(fd);
+		return (false);
+	}
+	close(fd);
+	return (true);
 }
 
 bool	parse_line(int *fd, t_game *cub3d)
@@ -35,6 +42,7 @@ bool	parse_line(int *fd, t_game *cub3d)
 		if (!get_data_from_line(line, cub3d))
 		{
 			free(line);
+			get_next_line(-1);
 			return (false);
 		}
 		free(line);

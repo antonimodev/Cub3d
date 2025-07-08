@@ -6,7 +6,7 @@
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 10:45:38 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/07 13:51:58 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/08 11:03:08 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ typedef struct s_textures // Testing about store texture paths
 {
 	char	*no; // North texture path
 	char	*so; // South texture path
-	char	*we; // West texture path
 	char	*ea; // East texture path
+	char	*we; // West texture path
 }	t_textures;
 
 typedef struct s_colors // Testing about store colors
@@ -123,7 +123,7 @@ bool	validate_file_access(const char *filename);
  */
 void	write_error(const char *message);
 
-/* ---------- INIT_GAME.C (5) ---------- */
+/* ---------- INIT_GAME.C (4) ---------- */
 
 /**
  * Initializes the game by setting up the MiniLibX,
@@ -133,6 +133,9 @@ void	write_error(const char *message);
  * @return true if initialization is successful, false otherwise
  */
 bool	init_game(t_game *cub3d); // Initialize game parameters
+
+/* ---------- CLEAN.C (4) --------- */
+
 void	cleanup_game(t_game *cub3d); // Clean up resources
 
 /* PARSING */

@@ -37,6 +37,8 @@ SRC = src/main.c \
 	\
 	src/parsing/texture/parse_texture.c \
 	src/parsing/texture/texture_storage.c \
+	\
+	src/clean.c \
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
