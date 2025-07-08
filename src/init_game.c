@@ -59,5 +59,9 @@ bool	init_game(t_game *cub3d)
 		cleanup_game(cub3d);
 		return (false);
 	}
+
+	// Not sure if hooks should be here
+	mlx_key_hook(cub3d->window, handle_keypress, cub3d); // Handle ESC, WASD and rotating with <, >
+	mlx_hook(cub3d->window, 17, 0, handle_close_window, cub3d); // Close window with X window button
 	return (true);
 }

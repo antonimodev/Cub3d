@@ -12,6 +12,16 @@
 
 #include "cub3d.h"
 
-void	foo(void)
+void	render_frame(t_game *cub3d)
 {
+	// Clean image buffer
+
+	// Render Floor and Ceiling
+	
+	// Raycasting loop
+}
+
+void	display_frame(t_game *cub3d)
+{
+    mlx_put_image_to_window(cub3d->mlx, cub3d->window, cub3d->image, 0, 0);
 }

@@ -27,7 +27,6 @@ Symbols: ❓ ✅
 - Duplicate color identifiers ✅
 - Invalid RGB values (not 0-255) ✅
 - Invalid color format (not R,G,B) ✅
-- Extra characters after valid identifiers ❓
 
 ## 🖥️ MLX & GRAPHICS ERRORS
 - MLX initialization failure ✅
@@ -42,7 +41,6 @@ Symbols: ❓ ✅
 ## 🎮 RUNTIME ERRORS
 - Invalid window close events ❓
 - Key press handling errors ❓
-- Mouse events (if implemented) ❓
 - Window resize handling ❓
 - Invalid player movements (through walls) ❓
 
@@ -71,3 +69,4 @@ SUBMODULES ADDED: minilib_linux, libft
 ---
 
 Keyword to test code: TESTING
+Keyword to check code: ???

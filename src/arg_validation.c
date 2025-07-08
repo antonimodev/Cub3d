@@ -67,12 +67,12 @@ bool	validate_file_access(const char *filename)
 		return (false);
 	}
 	close(fd);
-	fd = open(filename, __O_DIRECTORY);
-	if (fd != 1)
+	fd = open(filename, O_RDONLY | __O_DIRECTORY);
+	if (fd >= 0)
 	{
+		close(fd);
 		write_error("File not valid, is a directory.");
 		return (false);
 	}
-	close(fd);
 	return (true);
 }

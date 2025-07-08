@@ -12,11 +12,16 @@ RM      = rm -rf
 # =================== #
 
 LIBFT_DIR	= ./include/libft
-LIBFT_FLAGS = -L$(LIBFT_DIR) -lft
 MLX_DIR     = ./include/minilib_linux
+OBJ_DIR     = obj
+
+# =================== #
+#        FLAGS        #
+# =================== #
+
+LIBFT_FLAGS = -L$(LIBFT_DIR) -lft
 MLX_FLAGS   = -L$(MLX_DIR) -lmlx -lXext -lX11
 INC         = -Iinclude -I$(MLX_DIR) -I$(LIBFT_DIR)
-OBJ_DIR     = obj
 
 # ============ #
 #   SOURCES    #
@@ -37,6 +42,10 @@ SRC = src/main.c \
 	\
 	src/parsing/texture/parse_texture.c \
 	src/parsing/texture/texture_storage.c \
+	\
+	src/raycasting/raycasting.c \
+	\
+	src/hooks/hook.c \
 	\
 	src/clean.c \
 
@@ -61,6 +70,14 @@ $(NAME): $(OBJ)
 $(OBJ_DIR)/%.o: %.c
 	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) $(INC) -c $< -o $@
+
+valgrind: all
+	@echo "⚙️  Running Valgrind...\n"
+	@valgrind ./$(NAME) maps/map01.cub
+
+pull:
+	@git pull && git submodule update --init --recursive
+	@echo "Repository & submodules updated"
 
 clean:
 	@$(RM) $(OBJ_DIR)

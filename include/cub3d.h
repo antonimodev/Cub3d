@@ -30,6 +30,21 @@
 # define WIDTH 1280
 # define HEIGHT 720
 
+/* MOVEMENT */
+# define KEY_W				119
+# define KEY_A				97
+# define KEY_S				115
+# define KEY_D				100
+
+# define KEY_LEFT  			65361
+# define KEY_RIGHT 			65363
+
+/* QUIT */
+# define KEY_ESC  			65307
+
+/* EVENTS */
+# define DESTROY_WINDOW		17 // Event for window close
+
 /* ENUMS */
 typedef enum e_texture_type
 {
@@ -266,6 +281,7 @@ bool	find_and_validate_player(t_game *cub3d);
 /* TEXTURE */
 
 /* ---------- PARSE_TEXTURE.C (2) ---------- */
+
 /**
  * Processes texture path lines (NO, SO, EA, WE).
  * @param line The line containing texture information
@@ -295,5 +311,23 @@ bool	process_texture_line(char *line, const char *prefix, t_tex_type type,
  * @return true if stored successfully, false if duplicate found
  */
 bool	store_texture_path(const char *path, t_tex_type type, t_game *cub3d);
+
+/* HOOKS */
+
+/* ---------- HOOK.C (2) ---------- */
+
+/**
+ * Handle the key press for movement and quit.
+ * @param cub3d Pointer to the game structure
+ * @return true if hooks are set successfully, false otherwise
+ */
+int		handle_keypress(int key, void *param);
+
+/**
+ * Handle close button event to close the window.
+ * @param param Pointer to the game structure
+ * @return ???
+ */
+int		handle_close_window(void *param);
 
 #endif
