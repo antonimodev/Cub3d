@@ -1,28 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycasting.c                                       :+:      :+:    :+:   */
+/*   movement_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/08 13:18:40 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/09 14:05:32 by antonimo         ###   ########.fr       */
+/*   Created: 2025/07/09 12:00:23 by antonimo          #+#    #+#             */
+/*   Updated: 2025/07/09 13:48:01 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	render_frame(t_game *cub3d)
+void	move(t_game *cub3d, t_player_pos new_pos, t_player_pos old_pos)
 {
-	// Clean image buffer
-	mlx_destroy_image(cub3d->mlx, cub3d->image); // ???
-	
-	// Render Floor and Ceiling
+	char player;
 
-	// Raycasting loop
+	player = cub3d->map.map[old_pos.x][old_pos.y];
+	cub3d->map.map[new_pos.x][new_pos.y] = player;
+	cub3d->map.map[old_pos.x][old_pos.y] = FLOOR;
+	cub3d->player_pos = new_pos;
 }
 
-void	display_frame(t_game *cub3d)
+bool	collision(t_game *cub3d, t_player_pos new_pos)
 {
-    mlx_put_image_to_window(cub3d->mlx, cub3d->window, cub3d->image, 0, 0);
+	return (cub3d->map.map[new_pos.x][new_pos.y] == WALL);
 }

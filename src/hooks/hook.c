@@ -6,7 +6,7 @@
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 10:52:43 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/08 19:02:23 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/09 13:51:37 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,32 +14,33 @@
 
 int	handle_keypress(int key, void *param)
 {
-	t_game *cub3d = (t_game *)param;
-
+	t_game *cub3d;
+	
+	cub3d = (t_game *)param;
 	if (key == KEY_ESC)
-	{
-		cleanup_game(cub3d);
-		exit(EXIT_SUCCESS);
-	}
+		return (mlx_loop_end(cub3d->mlx));
 	if (key == KEY_W)
-		// Move player forward
+		move_forward(cub3d);
 	else if (key == KEY_S)
-		// Move player backward
+		move_back(cub3d);
 	else if (key == KEY_A)
-		// Move player left
+		move_left(cub3d);
 	else if (key == KEY_D)
-		// Move player right
-	else if (key == KEY_LEFT)
-		// Rotate player left
+		move_right(cub3d);
+/* 	else if (key == KEY_LEFT)
+		// Rotate camera to left
 	else if (key == KEY_RIGHT)
-		// Rotate player right
+		// Rotate camera to right */
+	printf("\n\n");
+	print_matrix(cub3d->map.map);
+	printf("\n\n");
 	return (0);
 }
 
 int	handle_close_window(void *param)
 {
-	t_game *cub3d = (t_game *)param;
-
-	cleanup_game(cub3d);
-	exit(EXIT_SUCCESS);
+	t_game *cub3d;
+	
+	cub3d = (t_game *)param;
+	return (mlx_loop_end(cub3d->mlx));
 }

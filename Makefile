@@ -46,6 +46,8 @@ SRC = src/main.c \
 	src/raycasting/raycasting.c \
 	\
 	src/hooks/hook.c \
+	src/hooks/movement.c \
+	src/hooks/movement_utils.c \
 	\
 	src/clean.c \
 
@@ -71,7 +73,7 @@ $(OBJ_DIR)/%.o: %.c
 	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) $(INC) -c $< -o $@
 
-valgrind: all
+valgrind: re
 	@echo "⚙️  Running Valgrind...\n"
 	@valgrind ./$(NAME) maps/map01.cub
 

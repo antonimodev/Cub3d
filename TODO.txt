@@ -70,3 +70,8 @@ SUBMODULES ADDED: minilib_linux, libft
 
 Keyword to test code: TESTING
 Keyword to check code: ???
+
+---
+
+Function mlx_destroy_display doesn't free all resources, specificly mlx pointer.
+Remember: free(xvar) inside submodule. For final project probably use free(cub3d->mlx);

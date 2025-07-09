@@ -6,7 +6,7 @@
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 10:45:38 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/08 11:03:08 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/09 14:14:23 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@
 /* DEFINES */
 # define WIDTH 1280
 # define HEIGHT 720
+# define WALL '1'
+# define FLOOR '0'
 
 /* MOVEMENT */
 # define KEY_W				119
@@ -43,7 +45,7 @@
 # define KEY_ESC  			65307
 
 /* EVENTS */
-# define DESTROY_WINDOW		17 // Event for window close
+# define CLOSE_WINDOW		17
 
 /* ENUMS */
 typedef enum e_texture_type
@@ -106,6 +108,12 @@ typedef struct s_game
 	t_game_colors	colors;
 	t_map			map;
 	t_player_pos	player_pos; // Player position in the map
+
+	// TESTING
+	int size_line;
+	int	bpp;
+	char *data;
+	int endian;
 }	t_game;
 
 /* SRC */
@@ -329,5 +337,50 @@ int		handle_keypress(int key, void *param);
  * @return ???
  */
 int		handle_close_window(void *param);
+
+
+/* ---------- MOVEMENT.C (4) ---------- */
+
+/**
+ * Move player forward
+ * @param cub3d Game structure.
+ */
+void	move_forward(t_game *cub3d);
+
+/**
+ * Move player left
+ * @param cub3d Game structure.
+ */
+void	move_left(t_game *cub3d);
+
+/**
+ * Move player back
+ * @param cub3d Game structure.
+ */
+void	move_back(t_game *cub3d);
+
+/**
+ * Move player right
+ * @param cub3d Game structure.
+ */
+void	move_right(t_game *cub3d);
+
+/* ---------- MOVEMENT_UTILS.C (2) ---------- */
+
+/**
+ * Processing the movement in the map of the game.
+ * @param cub3d Game structure.
+ * @param new_pos New position of the player
+ * @param old_pos Old position of the player
+ */
+void	move(t_game *cub3d, t_player_pos new_pos, t_player_pos old_pos);
+
+/**
+ * Check for collisions at the new player position.
+ * @param cub3d Game structure.
+ * @param new_pos New position of the player
+ * @return true if there is a collision, false otherwise
+ */
+bool	collision(t_game *cub3d, t_player_pos new_pos);
 
 #endif
