@@ -6,7 +6,7 @@
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 12:00:23 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/09 13:48:01 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/10 13:21:33 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	move(t_game *cub3d, t_player_pos new_pos, t_player_pos old_pos)
 	player = cub3d->map.map[old_pos.x][old_pos.y];
 	cub3d->map.map[new_pos.x][new_pos.y] = player;
 	cub3d->map.map[old_pos.x][old_pos.y] = FLOOR;
-	cub3d->player_pos = new_pos;
+	cub3d->player = new_pos;
 }
 
 bool	collision(t_game *cub3d, t_player_pos new_pos)

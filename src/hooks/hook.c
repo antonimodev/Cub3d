@@ -6,7 +6,7 @@
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 10:52:43 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/09 13:51:37 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/10 12:30:09 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ int	handle_keypress(int key, void *param)
 		move_left(cub3d);
 	else if (key == KEY_D)
 		move_right(cub3d);
-/* 	else if (key == KEY_LEFT)
-		// Rotate camera to left
+	else if (key == KEY_LEFT)
+		rotate_left(cub3d);
 	else if (key == KEY_RIGHT)
-		// Rotate camera to right */
+		rotate_right(cub3d);
 	printf("\n\n");
 	print_matrix(cub3d->map.map);
 	printf("\n\n");

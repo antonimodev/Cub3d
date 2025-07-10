@@ -6,7 +6,7 @@
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 11:44:48 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/07 13:48:42 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/10 13:21:33 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,30 @@ bool	validate_complete_map(t_game *cub3d)
 	return (true);
 }
 
+static void	store_player(t_game *cub3d, int x, int y)
+{
+	if (cub3d->map.map[x][y] == NORTH)
+		cub3d->player.dir = NORTH;
+	else if (cub3d->map.map[x][y] == SOUTH)
+		cub3d->player.dir = SOUTH;
+	else if (cub3d->map.map[x][y] == WEST)
+		cub3d->player.dir = WEST;
+	else if (cub3d->map.map[x][y] == EAST)
+		cub3d->player.dir = EAST;
+}
+
 static bool	validate_one_player(t_game *cub3d, int x, int y)
 {
 	while (cub3d->map.map[x][y])
 	{
-		if (cub3d->map.map[x][y] == 'N' || cub3d->map.map[x][y] == 'S'
-			|| cub3d->map.map[x][y] == 'E' || cub3d->map.map[x][y] == 'W')
+		if (cub3d->map.map[x][y] == NORTH || cub3d->map.map[x][y] == SOUTH
+			|| cub3d->map.map[x][y] == EAST || cub3d->map.map[x][y] == WEST)
 		{
-			if (!cub3d->player_pos.x && !cub3d->player_pos.y)
+			if (!cub3d->player.x && !cub3d->player.y)
 			{
-				cub3d->player_pos.x = x;
-				cub3d->player_pos.y = y;
+				cub3d->player.x = x;
+				cub3d->player.y = y;
+				store_player(cub3d, x, y);
 			}
 			else
 			{
@@ -60,7 +73,7 @@ bool	find_and_validate_player(t_game *cub3d)
 			return (false);
 		x_pos++;
 	}
-	if (!cub3d->player_pos.x && !cub3d->player_pos.y)
+	if (!cub3d->player.x && !cub3d->player.y)
 	{
 		write_error("No player found in map");
 		return (false);
@@ -76,8 +89,8 @@ bool	validate_map_enclosed(t_game *cub3d)
 	map_copy = matrix_cpy(cub3d->map.map, 0);
 	if (!map_copy)
 		return (false);
-	result = validate_flood_fill(cub3d->player_pos.x,
-			cub3d->player_pos.y, map_copy);
+	result = validate_flood_fill(cub3d->player.x,
+			cub3d->player.y, map_copy);
 	free_matrix(map_copy);
 	if (!result)
 		write_error("Map is not properly enclosed by walls");

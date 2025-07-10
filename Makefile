@@ -48,6 +48,7 @@ SRC = src/main.c \
 	src/hooks/hook.c \
 	src/hooks/movement.c \
 	src/hooks/movement_utils.c \
+	src/hooks/rotate.c \
 	\
 	src/clean.c \
 

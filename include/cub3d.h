@@ -6,7 +6,7 @@
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 10:45:38 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/09 14:14:23 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/10 13:56:42 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,24 @@
 # include "mlx.h"		// For MiniLibX functions
 # include "libft.h"		// For Libft functions
 
-/* DEFINES */
-# define WIDTH 1280
-# define HEIGHT 720
-# define WALL '1'
-# define FLOOR '0'
+/* DIMENSIONS */
+# define WIDTH	1280
+# define HEIGHT	720
 
-/* MOVEMENT */
+/* MAP */
+# define WALL	'1'
+# define FLOOR	'0'
+
+/* MATHS */
+# define PI		3.1416	// PI with less decimals
+
+/* MOVEMENTS */
 # define KEY_W				119
 # define KEY_A				97
 # define KEY_S				115
 # define KEY_D				100
 
+/* ROTATIONS */
 # define KEY_LEFT  			65361
 # define KEY_RIGHT 			65363
 
@@ -47,6 +53,10 @@
 /* EVENTS */
 # define CLOSE_WINDOW		17
 
+/* DEFAULT VALUES */
+# define ANGLE_SPEED		0.01
+# define PLAYER_SPEED		0.05
+
 /* ENUMS */
 typedef enum e_texture_type
 {
@@ -55,6 +65,14 @@ typedef enum e_texture_type
 	TEXTURE_EAST,
 	TEXTURE_WEST
 }	t_tex_type;
+
+typedef enum e_player_direction
+{
+	NORTH = 'N',
+	SOUTH = 'S',
+	EAST = 'E',
+	WEST = 'W'
+}	t_direction;
 
 typedef enum e_color_type
 {
@@ -66,9 +84,19 @@ typedef enum e_color_type
 
 typedef struct s_player_pos
 {
-	int	x;
-	int	y;
+	float		x;
+	float		y;
+	t_angle		angle;
+	t_direction	dir;
 }	t_player_pos;
+
+typedef struct s_player_angle
+{
+	float	current_angle;
+	float	angle_speed;
+	float	cos_angle;		// May be deleted in future if only has 1 use
+	float	sin_angle;		// May be deleted in future if only has 1 use
+} t_angle;
 
 typedef struct s_textures // Testing about store texture paths
 {
@@ -107,7 +135,7 @@ typedef struct s_game
 	t_textures		texture_paths;
 	t_game_colors	colors;
 	t_map			map;
-	t_player_pos	player_pos; // Player position in the map
+	t_player_pos	player; // Player position in the map
 
 	// TESTING
 	int size_line;
@@ -197,15 +225,6 @@ bool	get_data_from_line(char *line, t_game *cub3d);
  */
 bool	validate_assigned_params(t_game *cub3d);
 
-/**
- * Validates that the map is complete and properly enclosed.
- * Checks if the map has a player, if it is enclosed by walls,
- * and if it contains valid characters.
- * @param cub3d Pointer to the game structure to validate
- * @return true if the map is valid, false otherwise
- */
-bool	validate_complete_map(t_game *cub3d);
-
 /* COLOR */
 
 /* ---------- PARSE_COLOR.C (2) ---------- */
@@ -268,7 +287,7 @@ bool	validate_flood_fill(int x, int y, char **map);
  */
 bool	get_map_data(char *line, t_game *cub3d);
 
-/* ---------- MAP_VALIDATION.C (3) ---------- */
+/* ---------- MAP_VALIDATION.C (5) ---------- */
 
 /**
  * Validates that the map is complete and properly enclosed
@@ -285,6 +304,15 @@ bool	validate_map_enclosed(t_game *cub3d);
  * @return true if the player is found and valid, false otherwise
  */
 bool	find_and_validate_player(t_game *cub3d);
+
+/**
+ * Validates that the map is complete and properly enclosed.
+ * Checks if the map has a player, if it is enclosed by walls,
+ * and if it contains valid characters.
+ * @param cub3d Pointer to the game structure to validate
+ * @return true if the map is valid, false otherwise
+ */
+bool	validate_complete_map(t_game *cub3d);
 
 /* TEXTURE */
 
@@ -382,5 +410,12 @@ void	move(t_game *cub3d, t_player_pos new_pos, t_player_pos old_pos);
  * @return true if there is a collision, false otherwise
  */
 bool	collision(t_game *cub3d, t_player_pos new_pos);
+
+/* ---------- ROTATE.C (4) ---------- */
+
+void	init_angles(t_game *cub3d);
+void	normalize_angle(t_game *cub3d);
+void	rotate_left(t_game *cub3d);
+void	rotate_right(t_game *cub3d);
 
 #endif
