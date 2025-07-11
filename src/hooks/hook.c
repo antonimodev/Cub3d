@@ -6,13 +6,13 @@
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 10:52:43 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/10 12:30:09 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/11 14:10:39 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	handle_keypress(int key, void *param)
+int	handle_key_press(int key, void *param)
 {
 	t_game *cub3d;
 	
@@ -20,20 +20,37 @@ int	handle_keypress(int key, void *param)
 	if (key == KEY_ESC)
 		return (mlx_loop_end(cub3d->mlx));
 	if (key == KEY_W)
-		move_forward(cub3d);
+		cub3d->player.move.forward = true;
 	else if (key == KEY_S)
-		move_back(cub3d);
+		cub3d->player.move.back = true;
 	else if (key == KEY_A)
-		move_left(cub3d);
+		cub3d->player.move.left = true;
 	else if (key == KEY_D)
-		move_right(cub3d);
+		cub3d->player.move.right = true;
 	else if (key == KEY_LEFT)
-		rotate_left(cub3d);
+		cub3d->player.rotate.left = true;
 	else if (key == KEY_RIGHT)
-		rotate_right(cub3d);
-	printf("\n\n");
-	print_matrix(cub3d->map.map);
-	printf("\n\n");
+		cub3d->player.rotate.right = true;
+	return (0);
+}
+
+int	handle_key_release(int key, void *param)
+{
+	t_game *cub3d;
+
+	cub3d = (t_game *)param;
+	if (key == KEY_W)
+		cub3d->player.move.forward = false;
+	else if (key == KEY_S)
+		cub3d->player.move.back = false;
+	else if (key == KEY_A)
+		cub3d->player.move.left = false;
+	else if (key == KEY_D)
+		cub3d->player.move.right = false;
+	else if (key == KEY_LEFT)
+		cub3d->player.rotate.left = false;
+	else if (key == KEY_RIGHT)
+		cub3d->player.rotate.right = false;
 	return (0);
 }
 

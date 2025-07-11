@@ -6,7 +6,7 @@
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 10:45:38 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/10 13:56:42 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/11 14:01:50 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@
 # include "libft.h"		// For Libft functions
 
 /* DIMENSIONS */
-# define WIDTH	1280
-# define HEIGHT	720
+# define WIDTH	1920
+# define HEIGHT	1080
 
 /* MAP */
 # define WALL	'1'
@@ -52,10 +52,12 @@
 
 /* EVENTS */
 # define CLOSE_WINDOW		17
+# define KEY_PRESSED		2
+# define KEY_RELEASED		3
 
 /* DEFAULT VALUES */
 # define ANGLE_SPEED		0.01
-# define PLAYER_SPEED		0.05
+# define PLAYER_SPEED		5
 
 /* ENUMS */
 typedef enum e_texture_type
@@ -82,14 +84,6 @@ typedef enum e_color_type
 
 /* STRUCTURES */
 
-typedef struct s_player_pos
-{
-	float		x;
-	float		y;
-	t_angle		angle;
-	t_direction	dir;
-}	t_player_pos;
-
 typedef struct s_player_angle
 {
 	float	current_angle;
@@ -97,6 +91,30 @@ typedef struct s_player_angle
 	float	cos_angle;		// May be deleted in future if only has 1 use
 	float	sin_angle;		// May be deleted in future if only has 1 use
 } t_angle;
+
+typedef struct s_player_move
+{
+	bool	forward;
+	bool	back;
+	bool	left;
+	bool	right;
+}	t_move;
+
+typedef struct s_player_rotate
+{
+	bool	left;
+	bool	right;
+}	t_rotate;
+
+typedef struct s_player_pos
+{
+	float		x;
+	float		y;
+	t_angle		angle;
+	t_direction	dir;
+	t_move		move;
+	t_rotate	rotate;
+}	t_player_pos;
 
 typedef struct s_textures // Testing about store texture paths
 {
@@ -353,11 +371,18 @@ bool	store_texture_path(const char *path, t_tex_type type, t_game *cub3d);
 /* ---------- HOOK.C (2) ---------- */
 
 /**
- * Handle the key press for movement and quit.
- * @param cub3d Pointer to the game structure
- * @return true if hooks are set successfully, false otherwise
+ * Handle key press event.
+ * @param param Pointer to the game structure
+ * @return ???
  */
-int		handle_keypress(int key, void *param);
+int		handle_key_press(int key, void *param);
+
+/**
+ * Handle key release event.
+ * @param param Pointer to the game structure
+ * @return ???
+ */
+int		handle_key_release(int key, void *param);
 
 /**
  * Handle close button event to close the window.
@@ -368,6 +393,11 @@ int		handle_close_window(void *param);
 
 
 /* ---------- MOVEMENT.C (4) ---------- */
+
+/**
+ * WRITE HERE
+ */
+void	move_player(t_game *cub3d);
 
 /**
  * Move player forward
@@ -393,23 +423,7 @@ void	move_back(t_game *cub3d);
  */
 void	move_right(t_game *cub3d);
 
-/* ---------- MOVEMENT_UTILS.C (2) ---------- */
-
-/**
- * Processing the movement in the map of the game.
- * @param cub3d Game structure.
- * @param new_pos New position of the player
- * @param old_pos Old position of the player
- */
-void	move(t_game *cub3d, t_player_pos new_pos, t_player_pos old_pos);
-
-/**
- * Check for collisions at the new player position.
- * @param cub3d Game structure.
- * @param new_pos New position of the player
- * @return true if there is a collision, false otherwise
- */
-bool	collision(t_game *cub3d, t_player_pos new_pos);
+/* ---------- MOVEMENT_UTILS.C (0) ---------- */
 
 /* ---------- ROTATE.C (4) ---------- */
 
@@ -417,5 +431,9 @@ void	init_angles(t_game *cub3d);
 void	normalize_angle(t_game *cub3d);
 void	rotate_left(t_game *cub3d);
 void	rotate_right(t_game *cub3d);
+
+
+/* TO SET SOMEWHERE */
+void	render_frame(t_game *cub3d);
 
 #endif

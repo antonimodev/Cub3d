@@ -6,21 +6,12 @@
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 13:18:40 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/09 14:05:32 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/11 12:37:13 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	render_frame(t_game *cub3d)
-{
-	// Clean image buffer
-	mlx_destroy_image(cub3d->mlx, cub3d->image); // ???
-	
-	// Render Floor and Ceiling
-
-	// Raycasting loop
-}
 
 void	display_frame(t_game *cub3d)
 {

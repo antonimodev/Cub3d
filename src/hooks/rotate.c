@@ -6,7 +6,7 @@
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 12:14:56 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/10 13:21:38 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/11 13:38:18 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	init_angles(t_game *cub3d)
 
 	cub3d->player.angle.cos_angle = cos(cub3d->player.angle.current_angle);
 	cub3d->player.angle.sin_angle = sin(cub3d->player.angle.current_angle);
-	cub3d->player.angle.angle_speed = ANGLE_SPEED; // may be deleted because angle speed is const defined
 }
 
 void	normalize_angle(t_game *cub3d)

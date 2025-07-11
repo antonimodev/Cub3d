@@ -4,7 +4,7 @@
 
 NAME    = cub3D
 CC      = gcc
-CFLAGS  = -Wall -Wextra -Werror -g
+CFLAGS  = -Wall -Wextra #-Werror -g
 RM      = rm -rf
 
 # =================== #
@@ -67,7 +67,7 @@ mlx:
 	@make -C $(MLX_DIR) > /dev/null 2>&1
 
 $(NAME): $(OBJ)
-	@$(CC) $(CFLAGS) $(OBJ) $(MLX_FLAGS) $(LIBFT_FLAGS) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJ) $(MLX_FLAGS) $(LIBFT_FLAGS) -o $(NAME) -lm
 	@echo "✅ $(NAME) compiled"
 
 $(OBJ_DIR)/%.o: %.c
