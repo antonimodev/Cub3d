@@ -6,7 +6,7 @@
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 10:53:23 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/11 14:25:34 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/14 12:56:54 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static bool	init_image(t_game *cub3d)
 
 // TO ORGANIZE:
 
-static void put_pixel(int x, int y, int color, t_game *cub3d)
+void	put_pixel(int x, int y, int color, t_game *cub3d)
 {
 	int index;
 
@@ -78,7 +78,7 @@ static void	clean_canvas(t_game *cub3d)
 	}
 }
 
-static void	draw_player(t_game *cub3d)
+static void	draw_player(t_game *cub3d) // TESTING, DON'T USE FOR :D
 {
 	int	x;
 	int	y;
@@ -107,6 +107,7 @@ void	render_frame(t_game *cub3d)
 {
     clean_canvas(cub3d);
     draw_player(cub3d);
+	raycast(cub3d);
     mlx_put_image_to_window(cub3d->mlx, cub3d->window, cub3d->image, 0, 0);
 }
 

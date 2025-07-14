@@ -1,33 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rotate.c                                           :+:      :+:    :+:   */
+/*   movement2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/10 12:14:56 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/14 13:00:35 by antonimo         ###   ########.fr       */
+/*   Created: 2025/07/14 11:56:49 by antonimo          #+#    #+#             */
+/*   Updated: 2025/07/14 11:58:25 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	rotate_player(t_game *cub3d)
+void	move_player(t_game *cub3d)
 {
-	if (cub3d->player.rotate.left)
-		rotate_left(cub3d);
-	else if (cub3d->player.rotate.right)
-		rotate_right(cub3d);
-}
-
-void	rotate_left(t_game *cub3d)
-{
-	cub3d->player.angle.current_angle -= ANGLE_SPEED;
-	normalize_angle(cub3d);
-}
-
-void	rotate_right(t_game *cub3d)
-{
-	cub3d->player.angle.current_angle += ANGLE_SPEED;
-	normalize_angle(cub3d);
+	basic_move(cub3d);
+	advanced_move(cub3d);
 }

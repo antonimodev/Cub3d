@@ -45,9 +45,12 @@ SRC = src/main.c \
 	\
 	src/raycasting/raycasting.c \
 	\
+	src/hooks/player_move/advanced_moves.c \
+	src/hooks/player_move/basic_moves.c \
+	src/hooks/player_move/movement.c \
+	\
+	src/hooks/angles.c \
 	src/hooks/hook.c \
-	src/hooks/movement.c \
-	src/hooks/movement_utils.c \
 	src/hooks/rotate.c \
 	\
 	src/clean.c \

@@ -6,7 +6,7 @@
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 10:45:38 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/11 14:01:50 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/14 13:04:58 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@
 # define KEY_RELEASED		3
 
 /* DEFAULT VALUES */
-# define ANGLE_SPEED		0.01
-# define PLAYER_SPEED		5
+# define ANGLE_SPEED		0.05
+# define PLAYER_SPEED		2
 
 /* ENUMS */
 typedef enum e_texture_type
@@ -387,17 +387,35 @@ int		handle_key_release(int key, void *param);
 /**
  * Handle close button event to close the window.
  * @param param Pointer to the game structure
- * @return ???
+ * @return
  */
 int		handle_close_window(void *param);
 
+/* PLAYER_MOVE */
 
-/* ---------- MOVEMENT.C (4) ---------- */
+/* ---------- ADVANCED_MOVES.C (5) ---------- */
 
 /**
- * WRITE HERE
+ * Main function that contains diagonal movements logic.
+ * @param cub3d Game structure.
+ */
+void	advanced_move(t_game *cub3d);
+
+/* ---------- MOVEMENT.C (1) ---------- */
+
+/**
+ * Main function that contains all movement logic
+ * @param cub3d Game structure.
  */
 void	move_player(t_game *cub3d);
+
+/* ---------- BASIC_MOVES.C (5) ---------- */
+
+/**
+ * Main function that contains basic movements logic
+ * @param cub3d Game structure.
+ */
+void	basic_move(t_game *cub3d);
 
 /**
  * Move player forward
@@ -423,17 +441,45 @@ void	move_back(t_game *cub3d);
  */
 void	move_right(t_game *cub3d);
 
-/* ---------- MOVEMENT_UTILS.C (0) ---------- */
+
+/* ---------- ANGLES.C (4) ---------- */
+
+/**
+ * Initialize player angle based on his orientation (N,S,E,W)
+ * @param cub3d Game structure.
+ */
+void	init_angles(t_game *cub3d);
+
+/**
+ * Normalize angles if they're greater than 360º or
+ * less than 0º
+ * @param cub3d Game structure.
+ */
+void	normalize_angle(t_game *cub3d);
 
 /* ---------- ROTATE.C (4) ---------- */
 
-void	init_angles(t_game *cub3d);
-void	normalize_angle(t_game *cub3d);
-void	rotate_left(t_game *cub3d);
-void	rotate_right(t_game *cub3d);
+/**
+ * Main function that contains rotating player logic
+ * @param cub3d Game structure.
+ */
+void	rotate_player(t_game *cub3d);
 
+/**
+ * Rotate player to left direction
+ * @param cub3d Game structure.
+ */
+void	rotate_left(t_game *cub3d);
+
+/**
+ * Rotate player to right direction
+ * @param cub3d Game structure.
+ */
+void	rotate_right(t_game *cub3d);
 
 /* TO SET SOMEWHERE */
 void	render_frame(t_game *cub3d);
+void	put_pixel(int x, int y, int color, t_game *cub3d);
+void	raycast(t_game *cub3d);
 
 #endif
