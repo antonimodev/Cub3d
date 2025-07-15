@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   movement2.c                                        :+:      :+:    :+:   */
+/*   movement.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 11:56:49 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/14 11:58:25 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/15 14:14:28 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	move_player(t_game *cub3d)
+void	move_player(t_player_pos *player)
 {
-	basic_move(cub3d);
-	advanced_move(cub3d);
+	basic_move(player);
+	advanced_move(player);
 }

@@ -1,33 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rotate.c                                           :+:      :+:    :+:   */
+/*   render_walls.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/10 12:14:56 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/15 14:22:08 by antonimo         ###   ########.fr       */
+/*   Created: 2025/07/15 12:55:55 by antonimo          #+#    #+#             */
+/*   Updated: 2025/07/15 13:12:42 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	rotate_player(t_player_pos *player)
+void	draw_walls(t_game *cub3d)
 {
-	if (player->rotate.left)
-		rotate_left(player);
-	else if (player->rotate.right)
-		rotate_right(player);
-}
+	int	x;
+	int	y;
 
-void	rotate_left(t_player_pos *player)
-{
-	player->angle.current_angle -= ANGLE_SPEED;
-	normalize_angle(player);
-}
-
-void	rotate_right(t_player_pos *player)
-{
-	player->angle.current_angle += ANGLE_SPEED;
-	normalize_angle(player);
+	x = 0;
+	while (cub3d->map.map[x])
+	{
+		y = 0;
+		while (cub3d->map.map[x][y])
+		{
+			if (cub3d->map.map[x][y] == WALL)
+				draw_square(cub3d, BLOCK, x * BLOCK, y * BLOCK);
+			y++;
+		}
+		x++;
+	}
 }

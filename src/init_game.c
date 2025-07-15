@@ -6,7 +6,7 @@
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 10:53:23 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/14 12:56:54 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/15 14:22:51 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	put_pixel(int x, int y, int color, t_game *cub3d)
 	cub3d->data[index + 2] = (color >> 16) & 0xFF;
 }
 
-static void	clean_canvas(t_game *cub3d)
+/* static void	clean_canvas(t_game *cub3d)
 {
 	int	x;
 	int	y;
@@ -76,28 +76,23 @@ static void	clean_canvas(t_game *cub3d)
 		}
 		x++;
 	}
-}
+} */
 
-static void	draw_player(t_game *cub3d) // TESTING, DON'T USE FOR :D
+void	draw_square(t_game *cub3d, int size, int x, int y) // TESTING, DON'T USE FOR :D
 {
-	int	x;
-	int	y;
-
-	x = cub3d->player.x;
-	y = cub3d->player.y;
-	for(int i = 0; i < 10; i++) {
+	for(int i = 0; i < size; i++) {
 		put_pixel(x, y, 0x004200, cub3d);
 		x++;
 	}
-	for(int i = 0; i < 10; i++) {
+	for(int i = 0; i < size; i++) {
 		put_pixel(x, y, 0x004200, cub3d);
 		y++;
 	}
-	for(int i = 0; i < 10; i++) {
+	for(int i = 0; i < size; i++) {
 		put_pixel(x, y, 0x004200, cub3d);
 		x--;
 	}
-	for(int i = 0; i < 10; i++) {
+	for(int i = 0; i < size; i++) {
 		put_pixel(x, y, 0x004200, cub3d);
 		y--;
 	}
@@ -105,8 +100,10 @@ static void	draw_player(t_game *cub3d) // TESTING, DON'T USE FOR :D
 
 void	render_frame(t_game *cub3d)
 {
-    clean_canvas(cub3d);
-    draw_player(cub3d);
+    //clean_canvas(cub3d);
+	draw_background(cub3d);
+    //draw_square(cub3d, 10, cub3d->player.x, cub3d->player.y);
+	draw_walls(cub3d);
 	raycast(cub3d);
     mlx_put_image_to_window(cub3d->mlx, cub3d->window, cub3d->image, 0, 0);
 }
@@ -116,8 +113,8 @@ static int	game_loop(void *param)
 	t_game *cub3d;
 
 	cub3d = (t_game *)param;
-	move_player(cub3d);
-	rotate_player(cub3d);
+	move_player(&cub3d->player);
+	rotate_player(&cub3d->player);
 	render_frame(cub3d);
 	return (0);
 }
@@ -143,7 +140,7 @@ bool	init_game(t_game *cub3d)
 	}
 
 	cub3d->data = mlx_get_data_addr(cub3d->image, &cub3d->bpp, &cub3d->size_line, &cub3d->endian);
-	init_angles(cub3d);
+	init_angles(&cub3d->player);
 	mlx_hook(cub3d->window, KEY_PRESSED, 1L<<0, handle_key_press, cub3d);
 	mlx_hook(cub3d->window, KEY_RELEASED, 1L<<1, handle_key_release, cub3d);
 	mlx_hook(cub3d->window, CLOSE_WINDOW, 0, handle_close_window, cub3d);

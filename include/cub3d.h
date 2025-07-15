@@ -6,7 +6,7 @@
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 10:45:38 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/14 13:04:58 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/15 14:23:18 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,11 @@
 /* DIMENSIONS */
 # define WIDTH	1920
 # define HEIGHT	1080
+# define BLOCK	64
 
 /* MAP */
-# define WALL	'1'
 # define FLOOR	'0'
+# define WALL	'1'
 
 /* MATHS */
 # define PI		3.1416	// PI with less decimals
@@ -397,49 +398,49 @@ int		handle_close_window(void *param);
 
 /**
  * Main function that contains diagonal movements logic.
- * @param cub3d Game structure.
+ * @param player Player structure.
  */
-void	advanced_move(t_game *cub3d);
+void	advanced_move(t_player_pos *player);
 
 /* ---------- MOVEMENT.C (1) ---------- */
 
 /**
  * Main function that contains all movement logic
- * @param cub3d Game structure.
+ * @param player Player structure.
  */
-void	move_player(t_game *cub3d);
+void	move_player(t_player_pos *player);
 
 /* ---------- BASIC_MOVES.C (5) ---------- */
 
 /**
  * Main function that contains basic movements logic
- * @param cub3d Game structure.
+ * @param player Player structure.
  */
-void	basic_move(t_game *cub3d);
+void	basic_move(t_player_pos *player);
 
 /**
  * Move player forward
- * @param cub3d Game structure.
+ * @param player Player structure.
  */
-void	move_forward(t_game *cub3d);
+void	move_forward(t_player_pos *player);
 
 /**
  * Move player left
- * @param cub3d Game structure.
+ * @param player Player structure.
  */
-void	move_left(t_game *cub3d);
+void	move_left(t_player_pos *player);
 
 /**
  * Move player back
- * @param cub3d Game structure.
+ * @param player Player structure.
  */
-void	move_back(t_game *cub3d);
+void	move_back(t_player_pos *player);
 
 /**
  * Move player right
- * @param cub3d Game structure.
+ * @param player Player structure.
  */
-void	move_right(t_game *cub3d);
+void	move_right(t_player_pos *player);
 
 
 /* ---------- ANGLES.C (4) ---------- */
@@ -448,14 +449,14 @@ void	move_right(t_game *cub3d);
  * Initialize player angle based on his orientation (N,S,E,W)
  * @param cub3d Game structure.
  */
-void	init_angles(t_game *cub3d);
+void	init_angles(t_player_pos *player);
 
 /**
  * Normalize angles if they're greater than 360º or
  * less than 0º
  * @param cub3d Game structure.
  */
-void	normalize_angle(t_game *cub3d);
+void	normalize_angle(t_player_pos *player);
 
 /* ---------- ROTATE.C (4) ---------- */
 
@@ -463,23 +464,47 @@ void	normalize_angle(t_game *cub3d);
  * Main function that contains rotating player logic
  * @param cub3d Game structure.
  */
-void	rotate_player(t_game *cub3d);
+void	rotate_player(t_player_pos *player);
 
 /**
  * Rotate player to left direction
  * @param cub3d Game structure.
  */
-void	rotate_left(t_game *cub3d);
+void	rotate_left(t_player_pos *player);
 
 /**
  * Rotate player to right direction
  * @param cub3d Game structure.
  */
-void	rotate_right(t_game *cub3d);
+void	rotate_right(t_player_pos *player);
 
 /* TO SET SOMEWHERE */
 void	render_frame(t_game *cub3d);
 void	put_pixel(int x, int y, int color, t_game *cub3d);
+
+
+/* RAYCASTING */
+
+/* ---------- RAYCASTING.C (3) ---------- */
+
+/**
+ * WRITE HERE
+ */
 void	raycast(t_game *cub3d);
+
+/* RENDER */
+
+/* ---------- RENDER_BACKGROUND.C (2) ---------- */
+
+/**
+ * WRITE HERE
+ */
+void	draw_background(t_game *cub3d);
+
+
+/* PROBABLY IN THE FUTURE WE'LL CHANGE THE POSITION OF THESE FUCTIONS */
+void	draw_square(t_game *cub3d, int size, int x, int y); // TESTING, DON'T USE FOR :D
+void	draw_walls(t_game *cub3d);
+void foo(int ray_x, int ray_y, int i, t_game *cub3d);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:52:53 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/14 13:31:56 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/15 14:16:48 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,41 +89,38 @@ void	move_right(t_game *cub3d)
 	cub3d->player.y += cub3d->player.angle.cos_angle * PLAYER_SPEED;  // ← cos
 } */
 
-void	move_forward(t_game *cub3d)
+void	move_forward(t_player_pos *player)
 {
-	cub3d->player.x += cos(cub3d->player.angle.current_angle) * PLAYER_SPEED;
-	cub3d->player.y += sin(cub3d->player.angle.current_angle) * PLAYER_SPEED;
+	player->x += cos(player->angle.current_angle) * PLAYER_SPEED;
+	player->y += sin(player->angle.current_angle) * PLAYER_SPEED;
 }
 
-void	move_back(t_game *cub3d)
+void	move_back(t_player_pos *player)
 {
-	cub3d->player.x -= cos(cub3d->player.angle.current_angle) * PLAYER_SPEED;
-	cub3d->player.y -= sin(cub3d->player.angle.current_angle) * PLAYER_SPEED;
+	player->x -= cos(player->angle.current_angle) * PLAYER_SPEED;
+	player->y -= sin(player->angle.current_angle) * PLAYER_SPEED;
 }
 
-void	move_left(t_game *cub3d)
+void	move_left(t_player_pos *player)
 {
-	cub3d->player.x += sin(cub3d->player.angle.current_angle) * PLAYER_SPEED;  // ← sin
-	cub3d->player.y -= cos(cub3d->player.angle.current_angle) * PLAYER_SPEED;  // ← cos
+	player->x += sin(player->angle.current_angle) * PLAYER_SPEED;  // ← sin
+	player->y -= cos(player->angle.current_angle) * PLAYER_SPEED;  // ← cos
 }
 
-void	move_right(t_game *cub3d)
+void	move_right(t_player_pos *player)
 {
-	cub3d->player.x -= sin(cub3d->player.angle.current_angle) * PLAYER_SPEED;  // ← -sin
-	cub3d->player.y += cos(cub3d->player.angle.current_angle) * PLAYER_SPEED;  // ← cos
+	player->x -= sin(player->angle.current_angle) * PLAYER_SPEED;  // ← -sin
+	player->y += cos(player->angle.current_angle) * PLAYER_SPEED;  // ← cos
 }
 
-void	basic_move(t_game *cub3d)
+void	basic_move(t_player_pos *player)
 {
-	t_move		player_move;
-	
-	player_move = cub3d->player.move;
-	if (player_move.forward)
-		move_forward(cub3d);
-	else if (player_move.back)
-		move_back(cub3d);
-	else if (player_move.left)
-		move_left(cub3d);
-	else if (player_move.right)
-		move_right(cub3d);
+	if (player->move.forward)
+		move_forward(player);
+	else if (player->move.back)
+		move_back(player);
+	else if (player->move.left)
+		move_left(player);
+	else if (player->move.right)
+		move_right(player);
 }
