@@ -6,7 +6,7 @@
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 11:44:48 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/10 13:21:33 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/16 14:12:47 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,10 @@ static bool	validate_one_player(t_game *cub3d, int x, int y)
 		if (cub3d->map.map[x][y] == NORTH || cub3d->map.map[x][y] == SOUTH
 			|| cub3d->map.map[x][y] == EAST || cub3d->map.map[x][y] == WEST)
 		{
-			if (!cub3d->player.x && !cub3d->player.y)
+			if (!cub3d->player.coords.x && !cub3d->player.coords.y)
 			{
-				cub3d->player.x = x;
-				cub3d->player.y = y;
+				cub3d->player.coords.x = x;
+				cub3d->player.coords.y = y;
 				store_player(cub3d, x, y);
 			}
 			else
@@ -73,7 +73,7 @@ bool	find_and_validate_player(t_game *cub3d)
 			return (false);
 		x_pos++;
 	}
-	if (!cub3d->player.x && !cub3d->player.y)
+	if (!cub3d->player.coords.x && !cub3d->player.coords.y)
 	{
 		write_error("No player found in map");
 		return (false);
@@ -89,8 +89,8 @@ bool	validate_map_enclosed(t_game *cub3d)
 	map_copy = matrix_cpy(cub3d->map.map, 0);
 	if (!map_copy)
 		return (false);
-	result = validate_flood_fill(cub3d->player.x,
-			cub3d->player.y, map_copy);
+	result = validate_flood_fill(cub3d->player.coords.x,
+			cub3d->player.coords.y, map_copy);
 	free_matrix(map_copy);
 	if (!result)
 		write_error("Map is not properly enclosed by walls");

@@ -6,7 +6,7 @@
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 10:45:38 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/15 14:23:18 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/16 13:35:18 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@
 # define KEY_RELEASED		3
 
 /* DEFAULT VALUES */
-# define ANGLE_SPEED		0.05
+# define ANGLE_SPEED		0.08
 # define PLAYER_SPEED		2
 
 /* ENUMS */
@@ -107,10 +107,15 @@ typedef struct s_player_rotate
 	bool	right;
 }	t_rotate;
 
+typedef struct s_coords
+{
+	float	x;
+	float	y;
+} t_coords;
+
 typedef struct s_player_pos
 {
-	float		x;
-	float		y;
+	t_coords	coords;
 	t_angle		angle;
 	t_direction	dir;
 	t_move		move;
@@ -505,6 +510,6 @@ void	draw_background(t_game *cub3d);
 /* PROBABLY IN THE FUTURE WE'LL CHANGE THE POSITION OF THESE FUCTIONS */
 void	draw_square(t_game *cub3d, int size, int x, int y); // TESTING, DON'T USE FOR :D
 void	draw_walls(t_game *cub3d);
-void foo(int ray_x, int ray_y, int i, t_game *cub3d);
+
 
 #endif

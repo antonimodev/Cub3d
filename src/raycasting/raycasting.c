@@ -6,11 +6,18 @@
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 13:18:40 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/15 14:08:24 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/16 14:15:08 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+static t_coords	process_ray(t_game *cub3d, t_coords ray)
+{
+	ray.x = ray.x - cub3d->player.coords.x;
+	ray.y = ray.y - cub3d->player.coords.y;
+	return (ray);
+}
 
 /**
  * @brief Calculate the Euclidean distance between two points.
@@ -24,7 +31,7 @@
  */
 static float   distance(float x, float y)
 {
-    return sqrt(x * x + y *y);
+    return sqrt(x * x + y * y);
 }
 
 /**
@@ -42,89 +49,122 @@ static float   distance(float x, float y)
  * @param cub3d Pointer to the game structure containing player angle information.
  * @return The corrected perpendicular distance as a float value.
  */
-static float   fixed_dist(float x1, float y1, float x2, float y2, t_game *cub3d)
+static float   fixed_dist(t_coords ray,
+		float current_angle)
 {
-    float   delta_x;
-    float   delta_y;
     float   angle;
     float   fixed_distance;
 
-    delta_x = x2 - x1;
-    delta_y = y2 - y1;
-    angle = atan2(delta_y, delta_x) - cub3d->player.angle.current_angle;
-    fixed_distance = distance(delta_x, delta_y) * cos(angle);
+    angle = atan2(ray.y, ray.x) - current_angle;
+    fixed_distance = distance(ray.x, ray.y) * cos(angle);
     return (fixed_distance);
 }
 
 
-static bool collision(float x, float y, t_game *cub3d)
+static bool collision(t_coords ray, char **map)
 {
-    int map_x;
+    int x;
+    int y;
+
+    x = ray.x / BLOCK;
+    y = ray.y / BLOCK;
+    return (map[y][x] == WALL);
+    /* int map_x;
     int map_y;
     int map_rows;
     int map_cols;
 
     map_x = (int)(x / BLOCK);
     map_y = (int)(y / BLOCK);
-    map_rows = matrix_len(cub3d->map.map);
-    if (map_x < 0 || map_x >= map_rows || !cub3d->map.map[map_x])
+    map_rows = matrix_len(map);
+    if (map_x < 0 || map_x >= map_rows || !map[map_x])
         return (true);
-    map_cols = ft_strlen(cub3d->map.map[map_x]);
+    map_cols = ft_strlen(map[map_x]);
     if (map_y < 0 || map_y >= map_cols)
         return (true);
-    if (cub3d->map.map[map_x][map_y] == WALL)
+    if (map[map_x][map_y] == WALL)
         return (true);
-    return (false);
+    return (false); */
+}
+
+static void	draw_3d(t_game *cub3d, float angle_column, float angle_start)
+{
+	t_coords	ray;
+	float		dist;
+	float		wall_height;
+	float		start_y;
+	float		end;
+
+	ray = cub3d->player.coords;
+    //printf("player x: %d, player y: %d \n", cub3d->player.coords.x, cub3d->player.coords.y);
+	cub3d->player.angle.cos_angle = cos(angle_start);
+	cub3d->player.angle.sin_angle = sin(angle_start);
+    while(!collision(ray, cub3d->map.map)) // straight ray
+    {
+        //put_pixel(ray.x, ray.y, 0xFF0000, cub3d);
+        ray.x += cub3d->player.angle.cos_angle;
+        ray.y += cub3d->player.angle.sin_angle;
+    }
+	ray = process_ray(cub3d, ray);
+	dist = fixed_dist(ray, cub3d->player.angle.current_angle);
+    wall_height = (BLOCK / dist) * WIDTH / 2;
+    start_y = (HEIGHT - wall_height) / 2;
+    end = start_y + wall_height;
+    while (start_y < end)
+    {
+        put_pixel(angle_column, start_y, 0xFFFFFF, cub3d);
+        start_y++;
+    }
 }
 
 void	raycast(t_game *cub3d) // DEBUG
 {
+    float	angle_start;
+    float   angle_increment;
+	int		angle_column;
+
+    angle_start = cub3d->player.angle.current_angle - PI / 6; // 30º
+    angle_increment = (PI / 3) / WIDTH; // num of radians to scale to WIDTH */
+	angle_column = 0;
+	while (angle_column < WIDTH)
+	{
+		draw_3d(cub3d, angle_column, angle_start);
+		angle_start += angle_increment;
+		angle_column++;
+	}
+}
+
+/* void	raycast(t_game *cub3d) // DEBUG
+{
     float   ray_x;
     float   ray_y;
 
+    // start_x
     float angle_start = cub3d->player.angle.current_angle - PI / 6; // -30°
+    //
     float angle_end = cub3d->player.angle.current_angle + PI / 6;   // +30°
-    ray_x = cub3d->player.x;
-    ray_y = cub3d->player.y;
-    while(!collision(ray_x, ray_y, cub3d))
+    ray_x = cub3d->player.coords.x;
+    ray_y = cub3d->player.coords.y;
+    while(!collision(ray_x, ray_y, cub3d)) // straight ray
     {
         put_pixel(ray_x, ray_y, 0x424242, cub3d);
         ray_x += cos(cub3d->player.angle.current_angle);
         ray_y += sin(cub3d->player.angle.current_angle);
     }
-    ray_x = cub3d->player.x;
-    ray_y = cub3d->player.y;
-    while(!collision(ray_x, ray_y, cub3d))
+    ray_x = cub3d->player.coords.x;
+    ray_y = cub3d->player.coords.y;
+    while(!collision(ray_x, ray_y, cub3d)) // diagonal left ray
     {
         put_pixel(ray_x, ray_y, 0x424242, cub3d);
         ray_x += cos(angle_start);
         ray_y += sin(angle_start);
     }
-    ray_x = cub3d->player.x;
-    ray_y = cub3d->player.y;
-    while(!collision(ray_x, ray_y, cub3d))
+    ray_x = cub3d->player.coords.x;
+    ray_y = cub3d->player.coords.y;
+    while(!collision(ray_x, ray_y, cub3d)) // diagonal right ray
     {
         put_pixel(ray_x, ray_y, 0x424242, cub3d);
         ray_x += cos(angle_end);
         ray_y += sin(angle_end);
     }
-}
-
-void foo(int ray_x, int ray_y, int i, t_game *cub3d)
-{
-    float dist;
-    float height;
-    int start_x; // ???
-    int start_y;
-    int end;
-
-    dist = distance(ray_x - cub3d->player.x, ray_y - cub3d->player.y);
-    height = (BLOCK / height) / 2;
-    start_y = (HEIGHT - height) / 2;
-    end = start_y + height;
-    while (start_y < end)
-    {
-        put_pixel(i, start_y, 0xFFFFFF, cub3d);
-        start_y++;
-    }
-}
+} */

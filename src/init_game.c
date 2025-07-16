@@ -6,7 +6,7 @@
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 10:53:23 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/15 14:22:51 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/16 14:16:42 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,9 +102,10 @@ void	render_frame(t_game *cub3d)
 {
     //clean_canvas(cub3d);
 	draw_background(cub3d);
-    //draw_square(cub3d, 10, cub3d->player.x, cub3d->player.y);
-	draw_walls(cub3d);
+	printf("player x: %f, player y: %f \n", cub3d->player.coords.x, cub3d->player.coords.y);
 	raycast(cub3d);
+    //draw_square(cub3d, 10, cub3d->player.coords.x, cub3d->player.coords.y);
+	//draw_walls(cub3d);
     mlx_put_image_to_window(cub3d->mlx, cub3d->window, cub3d->image, 0, 0);
 }
 
@@ -138,7 +139,6 @@ bool	init_game(t_game *cub3d)
 		cleanup_game(cub3d);
 		return (false);
 	}
-
 	cub3d->data = mlx_get_data_addr(cub3d->image, &cub3d->bpp, &cub3d->size_line, &cub3d->endian);
 	init_angles(&cub3d->player);
 	mlx_hook(cub3d->window, KEY_PRESSED, 1L<<0, handle_key_press, cub3d);
