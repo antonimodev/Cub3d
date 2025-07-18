@@ -6,7 +6,7 @@
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 11:42:12 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/07 13:48:55 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/18 13:55:44 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,24 @@ bool	get_texture_path(char *line, t_game *cub3d)
 	return (true);
 }
 
+static bool	validate_texture_extension(const char *filename)
+{
+	char	*file_extension;
+
+	file_extension = ft_strrchr(filename, '.');
+	if (!file_extension)
+	{
+		write_error("File has no extension. Expected .xpm");
+		return (false);
+	}
+	if (ft_strcmp(file_extension, ".xpm") != 0)
+	{
+		write_error("Invalid file extension. Expected .xpm");
+		return (false);
+	}
+	return (true);
+}
+
 bool	process_texture_line(char *line, const char *prefix, t_tex_type type,
 	t_game *cub3d)
 {
@@ -34,6 +52,11 @@ bool	process_texture_line(char *line, const char *prefix, t_tex_type type,
 	if (!clean_path || ft_strlen(clean_path) == 0)
 	{
 		write_error("Empty texture path\n");
+		free(clean_path);
+		return (false);
+	}
+	if (!validate_texture_extension(clean_path))
+	{
 		free(clean_path);
 		return (false);
 	}

@@ -6,7 +6,7 @@
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 10:53:33 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/09 14:19:18 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/18 12:32:17 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@ int	main(int ac, char **av)
 		write_error("Failed to initialize game.");
 		return (EXIT_FAILURE);
 	}
-	mlx_put_image_to_window(cub3d.mlx, cub3d.window, cub3d.image, 0, 0);
-	mlx_loop(cub3d.mlx);
 	cleanup_game(&cub3d);
 	return (EXIT_SUCCESS);
 }

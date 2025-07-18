@@ -6,7 +6,7 @@
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 10:45:38 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/16 13:35:18 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/18 14:19:05 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,13 @@ typedef enum e_color_type
 
 /* STRUCTURES */
 
+typedef struct s_image
+{
+	void	*ptr;
+	int		height;
+	int		width;
+} t_image;
+
 typedef struct s_player_angle
 {
 	float	current_angle;
@@ -157,6 +164,10 @@ typedef struct s_game
 	void			*window;
 	void			*image;
 	t_textures		texture_paths;
+	t_image			wall_no;
+	t_image			wall_so;
+	t_image			wall_ea;
+	t_image			wall_we;
 	t_game_colors	colors;
 	t_map			map;
 	t_player_pos	player; // Player position in the map

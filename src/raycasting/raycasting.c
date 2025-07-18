@@ -6,7 +6,7 @@
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 13:18:40 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/16 14:15:08 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/18 13:56:06 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,22 +69,6 @@ static bool collision(t_coords ray, char **map)
     x = ray.x / BLOCK;
     y = ray.y / BLOCK;
     return (map[y][x] == WALL);
-    /* int map_x;
-    int map_y;
-    int map_rows;
-    int map_cols;
-
-    map_x = (int)(x / BLOCK);
-    map_y = (int)(y / BLOCK);
-    map_rows = matrix_len(map);
-    if (map_x < 0 || map_x >= map_rows || !map[map_x])
-        return (true);
-    map_cols = ft_strlen(map[map_x]);
-    if (map_y < 0 || map_y >= map_cols)
-        return (true);
-    if (map[map_x][map_y] == WALL)
-        return (true);
-    return (false); */
 }
 
 static void	draw_3d(t_game *cub3d, float angle_column, float angle_start)
@@ -96,7 +80,6 @@ static void	draw_3d(t_game *cub3d, float angle_column, float angle_start)
 	float		end;
 
 	ray = cub3d->player.coords;
-    //printf("player x: %d, player y: %d \n", cub3d->player.coords.x, cub3d->player.coords.y);
 	cub3d->player.angle.cos_angle = cos(angle_start);
 	cub3d->player.angle.sin_angle = sin(angle_start);
     while(!collision(ray, cub3d->map.map)) // straight ray

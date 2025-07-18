@@ -1,9 +1,9 @@
-NO textures/wall_texture.jpg
-SO textures/wall_texture.jpg
-WE textures/wall_texture.jpg
-EA textures/wall_texture.jpg
-ñlkasjflkjñafslkj
-sadñdflafsldjñfalñjk
+NO textures/wall.xpm
+SO textures/wall.xpm
+WE textures/wall.xpm
+EA textures/wall.xpm
+
+
 F 220,100,8
 C 225,30,4
 

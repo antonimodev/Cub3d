@@ -6,7 +6,7 @@
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 10:53:23 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/16 14:16:42 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/18 12:32:41 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,15 @@ static int	game_loop(void *param)
 
 /* --------------------------------------------- */
 
+static void scale_coords(t_coords *coords)
+{
+	int temp_coord;
+
+	temp_coord = coords->x;
+    coords->x = coords->y * BLOCK + BLOCK / 2;
+	coords->y = temp_coord * BLOCK + BLOCK / 2;
+}
+
 bool	init_game(t_game *cub3d)
 {
 	if (!init_mlx(cub3d))
@@ -141,9 +150,12 @@ bool	init_game(t_game *cub3d)
 	}
 	cub3d->data = mlx_get_data_addr(cub3d->image, &cub3d->bpp, &cub3d->size_line, &cub3d->endian);
 	init_angles(&cub3d->player);
+	scale_coords(&cub3d->player.coords);
 	mlx_hook(cub3d->window, KEY_PRESSED, 1L<<0, handle_key_press, cub3d);
 	mlx_hook(cub3d->window, KEY_RELEASED, 1L<<1, handle_key_release, cub3d);
 	mlx_hook(cub3d->window, CLOSE_WINDOW, 0, handle_close_window, cub3d);
 	mlx_loop_hook(cub3d->mlx, game_loop, cub3d);
+	mlx_put_image_to_window(cub3d->mlx, cub3d->window, cub3d->image, 0, 0);
+	mlx_loop(cub3d->mlx);
 	return (true);
 }
