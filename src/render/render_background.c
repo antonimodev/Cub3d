@@ -28,7 +28,7 @@ void	draw_background(t_game *cub3d)
 		x = 0;
 		while (x < WIDTH)
 		{
-			put_pixel(x, y, color_to_hex(cub3d->colors.ceiling), cub3d);
+			put_pixel(x, y, color_to_hex(cub3d->colors.ceiling), cub3d->data, cub3d->size_line, cub3d->bpp);
 			x++;
 		}
 		y++;
@@ -38,7 +38,7 @@ void	draw_background(t_game *cub3d)
 		x = 0;
 		while (x < WIDTH)
 		{
-			put_pixel(x, y, color_to_hex(cub3d->colors.floor), cub3d);
+			put_pixel(x, y, color_to_hex(cub3d->colors.floor), cub3d->data, cub3d->size_line, cub3d->bpp);
 			x++;
 		}
 		y++;

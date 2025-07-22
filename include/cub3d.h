@@ -27,8 +27,8 @@
 # include "libft.h"		// For Libft functions
 
 /* DIMENSIONS */
-# define WIDTH	1920
-# define HEIGHT	1080
+# define WIDTH	640
+# define HEIGHT	480
 # define BLOCK	64
 
 /* MAP */
@@ -83,11 +83,21 @@ typedef enum e_color_type
 	COLOR_CEILING
 }	t_color_type;
 
+typedef enum ray_impact
+{
+	VERTICAL_HIT,
+	HORIZONTAL_HIT
+}	t_ray_impact;
+
 /* STRUCTURES */
 
 typedef struct s_image
 {
-	void	*ptr;
+	void	*ptr; 			// Pointer to the image structure
+	char	*data; 			// Pointer to the image data
+	int		size_line; 		// Size of a line in bytes
+	int		bpp; 			// Bits per pixel
+	int		endian;
 	int		height;
 	int		width;
 } t_image;
@@ -119,6 +129,16 @@ typedef struct s_coords
 	float	x;
 	float	y;
 } t_coords;
+
+typedef struct s_ray
+{
+	t_coords		coords;			// Y coordinate of the ray
+	t_ray_impact	side;			// Side of the wall hit (0 for vertical, 1 for horizontal)
+	float			wall_height;	// Height of the wall hit
+	float			drawStart;		// Start of the wall to draw
+	float			drawEnd;		// End of the wall to draw
+	float			fixed_dist;		// Height of the line to draw
+}	t_ray;
 
 typedef struct s_player_pos
 {
@@ -163,20 +183,15 @@ typedef struct s_game
 	void			*mlx;
 	void			*window;
 	void			*image;
+	void			*data;
+	int				size_line;
+	int				bpp;
+	int				endian;
 	t_textures		texture_paths;
-	t_image			wall_no;
-	t_image			wall_so;
-	t_image			wall_ea;
-	t_image			wall_we;
+	t_image			*wall_textures[4];
 	t_game_colors	colors;
 	t_map			map;
 	t_player_pos	player; // Player position in the map
-
-	// TESTING
-	int size_line;
-	int	bpp;
-	char *data;
-	int endian;
 }	t_game;
 
 /* SRC */
@@ -496,7 +511,7 @@ void	rotate_right(t_player_pos *player);
 
 /* TO SET SOMEWHERE */
 void	render_frame(t_game *cub3d);
-void	put_pixel(int x, int y, int color, t_game *cub3d);
+void	put_pixel(int x, int y, int color, char *data, int size_line, int bpp);
 
 
 /* RAYCASTING */
@@ -521,6 +536,7 @@ void	draw_background(t_game *cub3d);
 /* PROBABLY IN THE FUTURE WE'LL CHANGE THE POSITION OF THESE FUCTIONS */
 void	draw_square(t_game *cub3d, int size, int x, int y); // TESTING, DON'T USE FOR :D
 void	draw_walls(t_game *cub3d);
+void	load_textures(t_game *cub3d);
 
 
 #endif

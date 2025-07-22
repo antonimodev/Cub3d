@@ -47,16 +47,16 @@ static bool	init_image(t_game *cub3d)
 
 // TO ORGANIZE:
 
-void	put_pixel(int x, int y, int color, t_game *cub3d)
+void put_pixel(int x, int y, int color, char *data, int size_line, int bpp)
 {
-	int index;
+    int index;
 
-	if (x >= WIDTH || y >= HEIGHT || x < 0 || y < 0)
-		return;
-	index = y * cub3d->size_line + x * cub3d->bpp / 8;
-	cub3d->data[index] = color & 0xFF;
-	cub3d->data[index + 1] = (color >> 8) & 0xFF;
-	cub3d->data[index + 2] = (color >> 16) & 0xFF;
+    if (x < 0 || y < 0)
+        return;
+    index = y * size_line + x * (bpp / 8);
+    data[index] = color & 0xFF;           // Blue
+    data[index + 1] = (color >> 8) & 0xFF; // Green
+    data[index + 2] = (color >> 16) & 0xFF; // Red
 }
 
 /* static void	clean_canvas(t_game *cub3d)
@@ -78,7 +78,7 @@ void	put_pixel(int x, int y, int color, t_game *cub3d)
 	}
 } */
 
-void	draw_square(t_game *cub3d, int size, int x, int y) // TESTING, DON'T USE FOR :D
+/* void	draw_square(t_game *cub3d, int size, int x, int y) // TESTING, DON'T USE FOR :D
 {
 	for(int i = 0; i < size; i++) {
 		put_pixel(x, y, 0x004200, cub3d);
@@ -96,7 +96,7 @@ void	draw_square(t_game *cub3d, int size, int x, int y) // TESTING, DON'T USE FO
 		put_pixel(x, y, 0x004200, cub3d);
 		y--;
 	}
-}
+} */
 
 void	render_frame(t_game *cub3d)
 {
