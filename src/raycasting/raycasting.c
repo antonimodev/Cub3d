@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: frmarian <frmarian@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 13:18:40 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/18 13:56:06 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/23 14:16:22 by frmarian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,33 +71,89 @@ static bool collision(t_coords ray, char **map)
     return (map[y][x] == WALL);
 }
 
-static void	draw_3d(t_game *cub3d, float angle_column, float angle_start)
+/* static void	draw_3d(t_game *cub3d, float angle_column, float angle_start)
 {
-	t_coords	ray;
-	float		dist;
-	float		wall_height;
-	float		start_y;
-	float		end;
+    t_coords	ray;
+    float		dist;
+    float		wall_height;
+    float		start_y;
+    float		end;
+    t_coords    ray_dir;
+    t_image		*wall_texture;
 
-	ray = cub3d->player.coords;
-	cub3d->player.angle.cos_angle = cos(angle_start);
-	cub3d->player.angle.sin_angle = sin(angle_start);
-    while(!collision(ray, cub3d->map.map)) // straight ray
+    ray = cub3d->player.coords;
+    ray_dir.x = cos(angle_start);
+    ray_dir.y = sin(angle_start);
+
+    while(!collision(ray, cub3d->map.map))
     {
-        //put_pixel(ray.x, ray.y, 0xFF0000, cub3d);
-        ray.x += cub3d->player.angle.cos_angle;
-        ray.y += cub3d->player.angle.sin_angle;
+        ray.x += ray_dir.x;
+        ray.y += ray_dir.y;
     }
-	ray = process_ray(cub3d, ray);
-	dist = fixed_dist(ray, cub3d->player.angle.current_angle);
+	t_coords	placeholder = ray;
+    ray = process_ray(cub3d, ray);
+    wall_texture = select_wall_texture(cub3d, ray_dir, placeholder);
+
+    dist = fixed_dist(ray, cub3d->player.angle.current_angle);
     wall_height = (BLOCK / dist) * WIDTH / 2;
     start_y = (HEIGHT - wall_height) / 2;
     end = start_y + wall_height;
-    while (start_y < end)
+    // Usamos foo2 para pintar la columna texturizada
+    foo2(wall_texture, ray_dir, placeholder, wall_height, start_y, end, angle_column, cub3d);
+} */
+
+static void	draw_3d(t_game *cub3d, float angle_column, float angle_start)
+{
+    t_coords	ray;
+    t_coords	ray_impact;
+    t_coords	ray_relative;
+    float		dist;
+    float		wall_height;
+    float		start_y;
+    float		end;
+    t_coords    ray_dir;
+    t_image		*wall_texture;
+	int			wall_side;
+    float       step_size = 0.1f; // Paso más pequeño para mayor precisión
+
+    ray = cub3d->player.coords;
+    ray_dir.x = cos(angle_start);
+    ray_dir.y = sin(angle_start);
+
+    // Raycasting más preciso
+    while(!collision(ray, cub3d->map.map))
     {
-        put_pixel(angle_column, start_y, 0xFFFFFF, cub3d);
-        start_y++;
+        ray.x += ray_dir.x * step_size;
+        ray.y += ray_dir.y * step_size;
     }
+
+    // Retroceder un paso para estar justo antes de la colisión
+    ray.x -= ray_dir.x * step_size;
+    ray.y -= ray_dir.y * step_size;
+    
+    // Avanzar con pasos muy pequeños para encontrar el punto exacto
+    while(!collision(ray, cub3d->map.map))
+    {
+        ray.x += ray_dir.x * 0.01f;
+        ray.y += ray_dir.y * 0.01f;
+    }
+
+    // Guardar las coordenadas absolutas del punto de impacto
+    ray_impact = ray;
+    
+    // Calcular coordenadas relativas solo para la distancia
+    ray_relative = process_ray(cub3d, ray);
+    
+    // Usar las coordenadas absolutas para seleccionar la textura
+    wall_texture = select_wall_texture(cub3d, ray_dir, ray_impact, &wall_side);
+
+    dist = fixed_dist(ray_relative, cub3d->player.angle.current_angle);
+    wall_height = (BLOCK / dist) * WIDTH / 2;
+    start_y = (HEIGHT - wall_height) / 2;
+    end = start_y + wall_height;
+    
+    // Pasar las coordenadas absolutas del impacto para el texturizado
+    foo2(wall_texture, ray_dir, ray_impact, wall_height, start_y, end, angle_column, cub3d, wall_side);
 }
 
 void	raycast(t_game *cub3d) // DEBUG
@@ -116,6 +172,8 @@ void	raycast(t_game *cub3d) // DEBUG
 		angle_column++;
 	}
 }
+
+
 
 /* void	raycast(t_game *cub3d) // DEBUG
 {

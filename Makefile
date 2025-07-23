@@ -44,6 +44,7 @@ SRC = src/main.c \
 	src/parsing/texture/texture_storage.c \
 	\
 	src/raycasting/raycasting.c \
+	src/raycasting/raycast_utils.c \
 	\
 	src/render/render_background.c \
 	src/render/render_walls.c \
@@ -82,7 +83,7 @@ $(OBJ_DIR)/%.o: %.c
 
 valgrind: re
 	@echo "⚙️  Running Valgrind...\n"
-	@valgrind ./$(NAME) maps/map01.cub
+	@valgrind ./$(NAME) maps/map03.cub
 
 pull:
 	@git pull && git submodule update --init --recursive

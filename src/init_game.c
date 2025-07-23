@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_game.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: frmarian <frmarian@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 10:53:23 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/18 12:32:41 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/23 12:56:23 by frmarian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ static bool	init_window(t_game *cub3d)
 
 static bool	init_image(t_game *cub3d)
 {
-	cub3d->image = mlx_new_image(cub3d->mlx, WIDTH, HEIGHT);
-	if (!cub3d->image)
+	cub3d->image.ptr = mlx_new_image(cub3d->mlx, WIDTH, HEIGHT);
+	if (!cub3d->image.ptr)
 	{
 		write_error("Failed to create image.");
 		return (false);
@@ -47,16 +47,16 @@ static bool	init_image(t_game *cub3d)
 
 // TO ORGANIZE:
 
-void	put_pixel(int x, int y, int color, t_game *cub3d)
+void	put_pixel(int x, int y, int color, t_image *image)
 {
 	int index;
 
 	if (x >= WIDTH || y >= HEIGHT || x < 0 || y < 0)
 		return;
-	index = y * cub3d->size_line + x * cub3d->bpp / 8;
-	cub3d->data[index] = color & 0xFF;
-	cub3d->data[index + 1] = (color >> 8) & 0xFF;
-	cub3d->data[index + 2] = (color >> 16) & 0xFF;
+	index = y * image->size_line + x * image->bpp / 8;
+	image->data[index] = color & 0xFF;
+	image->data[index + 1] = (color >> 8) & 0xFF;
+	image->data[index + 2] = (color >> 16) & 0xFF;
 }
 
 /* static void	clean_canvas(t_game *cub3d)
@@ -81,19 +81,19 @@ void	put_pixel(int x, int y, int color, t_game *cub3d)
 void	draw_square(t_game *cub3d, int size, int x, int y) // TESTING, DON'T USE FOR :D
 {
 	for(int i = 0; i < size; i++) {
-		put_pixel(x, y, 0x004200, cub3d);
+		put_pixel(x, y, 0x004200, &cub3d->image);
 		x++;
 	}
 	for(int i = 0; i < size; i++) {
-		put_pixel(x, y, 0x004200, cub3d);
+		put_pixel(x, y, 0x004200, &cub3d->image);
 		y++;
 	}
 	for(int i = 0; i < size; i++) {
-		put_pixel(x, y, 0x004200, cub3d);
+		put_pixel(x, y, 0x004200, &cub3d->image);
 		x--;
 	}
 	for(int i = 0; i < size; i++) {
-		put_pixel(x, y, 0x004200, cub3d);
+		put_pixel(x, y, 0x004200, &cub3d->image);
 		y--;
 	}
 }
@@ -106,7 +106,7 @@ void	render_frame(t_game *cub3d)
 	raycast(cub3d);
     //draw_square(cub3d, 10, cub3d->player.coords.x, cub3d->player.coords.y);
 	//draw_walls(cub3d);
-    mlx_put_image_to_window(cub3d->mlx, cub3d->window, cub3d->image, 0, 0);
+    mlx_put_image_to_window(cub3d->mlx, cub3d->window, cub3d->image.ptr, 0, 0);
 }
 
 static int	game_loop(void *param)
@@ -148,14 +148,15 @@ bool	init_game(t_game *cub3d)
 		cleanup_game(cub3d);
 		return (false);
 	}
-	cub3d->data = mlx_get_data_addr(cub3d->image, &cub3d->bpp, &cub3d->size_line, &cub3d->endian);
+	cub3d->image.data = mlx_get_data_addr(cub3d->image.ptr, &cub3d->image.bpp, &cub3d->image.size_line, &cub3d->image.endian);
 	init_angles(&cub3d->player);
+	init_textures(cub3d); // TESTING
 	scale_coords(&cub3d->player.coords);
 	mlx_hook(cub3d->window, KEY_PRESSED, 1L<<0, handle_key_press, cub3d);
 	mlx_hook(cub3d->window, KEY_RELEASED, 1L<<1, handle_key_release, cub3d);
 	mlx_hook(cub3d->window, CLOSE_WINDOW, 0, handle_close_window, cub3d);
 	mlx_loop_hook(cub3d->mlx, game_loop, cub3d);
-	mlx_put_image_to_window(cub3d->mlx, cub3d->window, cub3d->image, 0, 0);
+	mlx_put_image_to_window(cub3d->mlx, cub3d->window, cub3d->image.ptr, 0, 0);
 	mlx_loop(cub3d->mlx);
 	return (true);
 }

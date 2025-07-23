@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: frmarian <frmarian@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 10:45:38 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/18 14:19:05 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/23 14:16:59 by frmarian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,13 @@ typedef enum e_color_type
 
 typedef struct s_image
 {
+	char	*data;		// added
+
 	void	*ptr;
+	int		size_line;	// added
+	int		bpp;		// added
+	int		endian;		// added
+
 	int		height;
 	int		width;
 } t_image;
@@ -162,7 +168,7 @@ typedef struct s_game
 {
 	void			*mlx;
 	void			*window;
-	void			*image;
+	t_image			image;
 	t_textures		texture_paths;
 	t_image			wall_no;
 	t_image			wall_so;
@@ -171,12 +177,6 @@ typedef struct s_game
 	t_game_colors	colors;
 	t_map			map;
 	t_player_pos	player; // Player position in the map
-
-	// TESTING
-	int size_line;
-	int	bpp;
-	char *data;
-	int endian;
 }	t_game;
 
 /* SRC */
@@ -496,7 +496,7 @@ void	rotate_right(t_player_pos *player);
 
 /* TO SET SOMEWHERE */
 void	render_frame(t_game *cub3d);
-void	put_pixel(int x, int y, int color, t_game *cub3d);
+void	put_pixel(int x, int y, int color, t_image *image);
 
 
 /* RAYCASTING */
@@ -521,6 +521,8 @@ void	draw_background(t_game *cub3d);
 /* PROBABLY IN THE FUTURE WE'LL CHANGE THE POSITION OF THESE FUCTIONS */
 void	draw_square(t_game *cub3d, int size, int x, int y); // TESTING, DON'T USE FOR :D
 void	draw_walls(t_game *cub3d);
-
-
+void	init_textures(t_game *cub3d);
+t_image	*select_wall_texture(t_game *cub3d, t_coords ray_dir, t_coords ray_pos, int *wall_side);
+void	foo2(t_image *wall_texture, t_coords ray_dir, t_coords ray_pos,
+              float wall_height, float start_y, float end, int angle_column, t_game *cub3d, int wall_side);
 #endif

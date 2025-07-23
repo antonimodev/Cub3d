@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_background.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: frmarian <frmarian@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 12:21:41 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/15 13:50:10 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/23 12:11:30 by frmarian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	draw_background(t_game *cub3d)
 		x = 0;
 		while (x < WIDTH)
 		{
-			put_pixel(x, y, color_to_hex(cub3d->colors.ceiling), cub3d);
+			put_pixel(x, y, color_to_hex(cub3d->colors.ceiling), &cub3d->image);
 			x++;
 		}
 		y++;
@@ -38,7 +38,7 @@ void	draw_background(t_game *cub3d)
 		x = 0;
 		while (x < WIDTH)
 		{
-			put_pixel(x, y, color_to_hex(cub3d->colors.floor), cub3d);
+			put_pixel(x, y, color_to_hex(cub3d->colors.floor), &cub3d->image);
 			x++;
 		}
 		y++;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: frmarian <frmarian@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 11:00:50 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/09 13:28:45 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/23 13:49:58 by frmarian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ static void	cleanup_game_textures(t_game *cub3d)
 
 static void	cleanup_game_mlx(t_game *cub3d)
 {
-	if (cub3d->image)
-		mlx_destroy_image(cub3d->mlx, cub3d->image);
+	if (cub3d->image.ptr)
+		mlx_destroy_image(cub3d->mlx, cub3d->image.ptr);
 	if (cub3d->window)
 		mlx_destroy_window(cub3d->mlx, cub3d->window);
 	if (cub3d->mlx)
