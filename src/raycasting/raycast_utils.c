@@ -12,7 +12,7 @@
 
 #include "cub3d.h"
 
-static t_coords	calculate_block_position(t_coords ray_pos)
+static t_coords	calc_block_pos(t_coords ray_pos)
 {
 	t_coords	distance;
 	float		x_in_block;
@@ -31,57 +31,43 @@ static t_coords	calculate_block_position(t_coords ray_pos)
 	return (distance);
 }
 
-static t_image	*get_vertical_wall_texture(t_game *cub3d, t_coords ray_dir)
+t_image	*select_wall_texture(t_game *cub3d, t_ray ray_data, int *wall_side)
 {
-	if (ray_dir.x > 0)
-		return (&cub3d->wall_ea);
-	return (&cub3d->wall_we);
+	t_coords	distances;
+
+	distances = calc_block_pos(ray_data.ray);
+	if (distances.x < distances.y)
+	{
+		*wall_side = 0;
+		if (ray_data.dir.x > 0)
+			return (&cub3d->wall_ea);
+		else
+			return (&cub3d->wall_we);
+	}
+	else
+	{
+		*wall_side = 1;
+		if (ray_data.dir.y > 0)
+			return (&cub3d->wall_so);
+		else
+			return (&cub3d->wall_no);
+	}
 }
 
-static t_image	*get_horizontal_wall_texture(t_game *cub3d, t_coords ray_dir)
-{
-	if (ray_dir.y > 0)
-		return (&cub3d->wall_so);
-	return (&cub3d->wall_no);
-}
-
-t_image	*select_wall_texture(t_game *cub3d, t_coords ray_dir, t_coords ray_pos, int *wall_side)
-{
-    t_coords	distances;
-
-    distances = calculate_block_position(ray_pos);
-    if (distances.x < distances.y)
-    {
-        *wall_side = 0;
-        if (ray_dir.x > 0)
-            return (&cub3d->wall_ea);
-        else
-            return (&cub3d->wall_we);
-    }
-    else
-    {
-        *wall_side = 1;
-        if (ray_dir.y > 0)
-            return (&cub3d->wall_so);
-        else
-            return (&cub3d->wall_no);
-    }
-}
-
-static float	calculate_wall_position(t_coords ray_pos, int wall_side)
+static float	calc_wall_pos(t_coords ray_pos, int wall_side)
 {
 	float	wall_x;
-	float	position_in_block;
+	float	pos_in_block;
 
 	if (wall_side == 0)
-		position_in_block = ray_pos.y - (int)(ray_pos.y / BLOCK) * BLOCK;
+		pos_in_block = ray_pos.y - (int)(ray_pos.y / BLOCK) * BLOCK;
 	else
-		position_in_block = ray_pos.x - (int)(ray_pos.x / BLOCK) * BLOCK;
-	wall_x = position_in_block / BLOCK;
+		pos_in_block = ray_pos.x - (int)(ray_pos.x / BLOCK) * BLOCK;
+	wall_x = pos_in_block / BLOCK;
 	return (wall_x);
 }
 
-static float	adjust_wall_position(float wall_x, t_coords ray_dir, int wall_side)
+static float	adjust_wall_pos(float wall_x, t_coords ray_dir, int wall_side)
 {
 	if (wall_side == 0 && ray_dir.x < 0)
 		return (1.0f - wall_x);
@@ -99,13 +85,13 @@ static int	clamp_texture_coordinate(int coordinate, int max_value)
 	return (coordinate);
 }
 
-static int	calc_pixel_x(t_image *wall_texture, t_coords ray_dir, t_coords ray_pos, int wall_side)
+static int	calc_pixel_x(t_image *wall_texture, t_ray ray_data, int wall_side)
 {
 	float	wall_x;
 	int		texture_x;
 
-	wall_x = calculate_wall_position(ray_pos, wall_side);
-	wall_x = adjust_wall_position(wall_x, ray_dir, wall_side);
+	wall_x = calc_wall_pos(ray_data.ray, wall_side);
+	wall_x = adjust_wall_pos(wall_x, ray_data.dir, wall_side);
 	texture_x = (int)(wall_x * wall_texture->width);
 	return (clamp_texture_coordinate(texture_x, wall_texture->width));
 }
@@ -127,11 +113,15 @@ static void	initialize_render_params(t_render_params *params, t_game *cub3d, t_i
 {
 	params->img_data = cub3d->image.data;
 	params->tex_data = wall_texture->data;
+
 	params->img_bpp_bytes = cub3d->image.bpp / 8;
 	params->tex_bpp_bytes = wall_texture->bpp / 8;
+
 	params->img_line_size = cub3d->image.size_line;
 	params->tex_line_size = wall_texture->size_line;
+
 	params->tex_height = wall_texture->height;
+
 	params->tex_x_offset = texture_x * params->tex_bpp_bytes;
 	params->img_x_offset = angle_column * params->img_bpp_bytes;
 }
@@ -147,16 +137,7 @@ static void	copy_texture_pixel(t_render_params *params, int y, int texture_y)
 	*(int*)(params->img_data + img_offset) = *(int*)(params->tex_data + tex_offset);
 }
 
-static int	validate_render_inputs(t_image *wall_texture, int angle_column)
-{
-	if (!wall_texture || !wall_texture->data)
-		return (0);
-	if (angle_column < 0 || angle_column >= WIDTH)
-		return (0);
-	return (1);
-}
-
-static int	calculate_y_bounds(float start_y, float end, int *y_start, int *y_end)
+static int	calc_y_bounds(float start_y, float end, int *y_start, int *y_end)
 {
 	*y_start = (int)start_y;
 	*y_end = (int)end;
@@ -185,8 +166,9 @@ static void	render_column_pixels(t_render_params *params, float tex_step, float 
 	}
 }
 
-void	render_wall_column(t_image *wall_texture, t_coords ray_dir, t_coords ray_pos,
-                         float wall_height, float start_y, float end, int angle_column, t_game *cub3d, int wall_side)
+void	render_wall_column(t_image *wall_texture, t_ray ray_data,
+                        float wall_height, float start_y, float end, 
+						int angle_column, t_game *cub3d, int wall_side)
 {
 	t_render_params	params;
 	float			tex_step;
@@ -195,12 +177,10 @@ void	render_wall_column(t_image *wall_texture, t_coords ray_dir, t_coords ray_po
 	int				y_start;
 	int				y_end;
 
-	if (!validate_render_inputs(wall_texture, angle_column))
-		return;
-	texture_x = calc_pixel_x(wall_texture, ray_dir, ray_pos, wall_side);
+	texture_x = calc_pixel_x(wall_texture, ray_data, wall_side);
 	tex_step = (float)wall_texture->height / wall_height;
 	tex_pos = (start_y - HEIGHT / 2 + wall_height / 2) * tex_step;
 	initialize_render_params(&params, cub3d, wall_texture, texture_x, angle_column);
-	calculate_y_bounds(start_y, end, &y_start, &y_end);
+	calc_y_bounds(start_y, end, &y_start, &y_end);
 	render_column_pixels(&params, tex_step, tex_pos, y_start, y_end);
 }

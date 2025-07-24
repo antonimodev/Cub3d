@@ -27,8 +27,8 @@
 # include "libft.h"		// For Libft functions
 
 /* DIMENSIONS */
-# define WIDTH	1920
-# define HEIGHT	1080
+# define WIDTH	720
+# define HEIGHT	480
 # define BLOCK	64
 
 /* MAP */
@@ -88,12 +88,10 @@ typedef enum e_color_type
 typedef struct s_image
 {
 	char	*data;		// added
-
 	void	*ptr;
 	int		size_line;	// added
 	int		bpp;		// added
 	int		endian;		// added
-
 	int		height;
 	int		width;
 } t_image;
@@ -126,6 +124,14 @@ typedef struct s_coords
 	float	x;
 	float	y;
 } t_coords;
+
+typedef struct s_ray
+{
+	t_coords	ray;
+	t_coords	impact;	// Impact point of the ray
+	t_coords	relative;	// Relative position of the ray
+	t_coords	dir;	// Direction of the ray
+} t_ray;
 
 typedef struct s_player_pos
 {
@@ -525,8 +531,8 @@ void	draw_background(t_game *cub3d);
 void	draw_square(t_game *cub3d, int size, int x, int y); // TESTING, DON'T USE FOR :D
 void	draw_walls(t_game *cub3d);
 void	init_textures(t_game *cub3d);
-t_image	*select_wall_texture(t_game *cub3d, t_coords ray_dir, t_coords ray_pos, int *wall_side);
-void	render_wall_column(t_image *wall_texture, t_coords ray_dir, t_coords ray_pos,
+t_image	*select_wall_texture(t_game *cub3d, t_ray ray_data, int *wall_side);
+void	render_wall_column(t_image *wall_texture, t_ray ray_data,
                          float wall_height, float start_y, float end, int angle_column, t_game *cub3d, int wall_side);
 void	get_map_size(t_game *cub3d);
 

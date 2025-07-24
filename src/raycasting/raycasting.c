@@ -12,13 +12,6 @@
 
 #include "cub3d.h"
 
-static t_coords	calculate_relative_position(t_game *cub3d, t_coords ray)
-{
-	ray.x = ray.x - cub3d->player.coords.x;
-	ray.y = ray.y - cub3d->player.coords.y;
-	return (ray);
-}
-
 /**
  * @brief Calculate the fish-eye corrected distance between two points.
  * 
@@ -34,14 +27,14 @@ static t_coords	calculate_relative_position(t_game *cub3d, t_coords ray)
  * @param cub3d Pointer to the game structure containing player angle information.
  * @return The corrected perpendicular distance as a float value.
  */
-static float fixed_dist(t_coords ray, float current_angle)
+static float	fixed_dist(t_coords ray, float current_angle)
 {
-    // Usar producto escalar en lugar de atan2 (mucho más rápido)
-    float cos_current = cos(current_angle);
-    float sin_current = sin(current_angle);
-    
-    // Producto escalar para obtener la componente perpendicular
-    return (ray.x * cos_current + ray.y * sin_current);
+	float current_cos;
+	float current_sin;
+
+	current_cos = cos(current_angle);
+	current_sin = sin(current_angle);
+	return (ray.x * current_cos + ray.y * current_sin);
 }
 
 void	get_map_size(t_game *cub3d)
@@ -154,12 +147,28 @@ static t_coords	cast_ray_fine(t_coords ray, float ray_dir_x, float ray_dir_y, t_
 	return (ray);
 }
 
-static float	calculate_wall_height(float dist)
+static void cast_ray(t_ray *ray_data, float cos_angle, float sin_angle, t_map map)
 {
-	return ((BLOCK / dist) * WIDTH / 2);
+	ray_data->ray = cast_ray_coarse(ray_data->ray, cos_angle, sin_angle, map);
+	ray_data->ray = cast_ray_fine(ray_data->ray, cos_angle, sin_angle, map);
 }
 
-static void	calculate_column_bounds(float wall_height, float *start_y, float *end)
+static t_coords	calc_ray_dist(t_player_pos player, t_coords ray)
+{
+	ray.x = ray.x - player.coords.x;
+	ray.y = ray.y - player.coords.y;
+	return (ray);
+}
+
+static void	store_ray_data(t_ray *ray_data, t_player_pos player, float cos_angle, float sin_angle)
+{
+    ray_data->impact = ray_data->ray;
+	ray_data->relative = calc_ray_dist(player, ray_data->ray);
+	ray_data->dir.x = cos_angle;
+	ray_data->dir.y = sin_angle;
+}
+
+static void	calc_column_bounds(float wall_height, float *start_y, float *end)
 {
 	*start_y = (HEIGHT - wall_height) / 2;
 	*end = *start_y + wall_height;
@@ -167,33 +176,20 @@ static void	calculate_column_bounds(float wall_height, float *start_y, float *en
 
 static void	draw_3d_cached(t_game *cub3d, int angle_column, float cos_angle, float sin_angle)
 {
-    t_coords	ray;
-    t_coords	ray_impact;
-    t_coords	ray_relative;
-    float		dist;
-    float		wall_height;
-    float		start_y;
-    float		end;
-    t_image		*wall_texture;
-    int			wall_side;
-    t_coords    ray_dir;
+	t_ray		ray_data;
+	float		wall_height;
+	float		start_y;
+	float		end;
+	int			wall_side;
 
-    ray = cub3d->player.coords;
-    // Lanzar rayo con pasos grandes primero
-    ray = cast_ray_coarse(ray, cos_angle, sin_angle, cub3d->map);
-    // Refinamiento con pasos pequeños
-    ray = cast_ray_fine(ray, cos_angle, sin_angle, cub3d->map);
-    // Storing the impact point
-    ray_impact = ray;
-    // Calc distance from player to wall
-    ray_relative = calculate_relative_position(cub3d, ray);
-    ray_dir.x = cos_angle;
-	ray_dir.y = sin_angle;
-    wall_texture = select_wall_texture(cub3d, ray_dir, ray_impact, &wall_side);
-    dist = fixed_dist(ray_relative, cub3d->player.angle.current_angle);
-    wall_height = calculate_wall_height(dist);
-    calculate_column_bounds(wall_height, &start_y, &end);
-    render_wall_column(wall_texture, ray_dir, ray_impact, wall_height, start_y, end, angle_column, cub3d, wall_side);
+	ray_data.ray = cub3d->player.coords;
+    cast_ray(&ray_data, cos_angle, sin_angle, cub3d->map);
+    store_ray_data(&ray_data, cub3d->player, cos_angle, sin_angle);
+	wall_height = (BLOCK / fixed_dist
+		(ray_data.relative, cub3d->player.angle.current_angle)) * WIDTH / 2;
+	calc_column_bounds(wall_height, &start_y, &end);
+	render_wall_column(select_wall_texture(cub3d, ray_data, &wall_side),
+		ray_data, wall_height, start_y, end, angle_column, cub3d, wall_side);
 }
 
 
