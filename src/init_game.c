@@ -6,7 +6,7 @@
 /*   By: frmarian <frmarian@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 10:53:23 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/23 12:56:23 by frmarian         ###   ########.fr       */
+/*   Updated: 2025/07/24 13:53:50 by frmarian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,24 +59,6 @@ void	put_pixel(int x, int y, int color, t_image *image)
 	image->data[index + 2] = (color >> 16) & 0xFF;
 }
 
-/* static void	clean_canvas(t_game *cub3d)
-{
-	int	x;
-	int	y;
-
-	x = 0;
-	y = 0;
-	while (x < 1920)
-	{
-		y = 0;
-		while (y < 1080)
-		{
-			put_pixel(x, y, 0xFFC0CB, cub3d);
-			y++;
-		}
-		x++;
-	}
-} */
 
 void	draw_square(t_game *cub3d, int size, int x, int y) // TESTING, DON'T USE FOR :D
 {
@@ -151,6 +133,7 @@ bool	init_game(t_game *cub3d)
 	cub3d->image.data = mlx_get_data_addr(cub3d->image.ptr, &cub3d->image.bpp, &cub3d->image.size_line, &cub3d->image.endian);
 	init_angles(&cub3d->player);
 	init_textures(cub3d); // TESTING
+	get_map_size(cub3d); // Get dimensions of the map
 	scale_coords(&cub3d->player.coords);
 	mlx_hook(cub3d->window, KEY_PRESSED, 1L<<0, handle_key_press, cub3d);
 	mlx_hook(cub3d->window, KEY_RELEASED, 1L<<1, handle_key_release, cub3d);

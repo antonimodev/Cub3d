@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   basic_moves.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: frmarian <frmarian@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:52:53 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/16 12:37:48 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/24 13:42:47 by frmarian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

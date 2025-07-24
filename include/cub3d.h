@@ -6,7 +6,7 @@
 /*   By: frmarian <frmarian@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 10:45:38 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/23 14:16:59 by frmarian         ###   ########.fr       */
+/*   Updated: 2025/07/24 13:53:08 by frmarian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@
 
 /* DEFAULT VALUES */
 # define ANGLE_SPEED		0.08
-# define PLAYER_SPEED		2
+# define PLAYER_SPEED		3
 
 /* ENUMS */
 typedef enum e_texture_type
@@ -100,10 +100,11 @@ typedef struct s_image
 
 typedef struct s_player_angle
 {
-	float	current_angle;
-	float	angle_speed;
-	float	cos_angle;		// May be deleted in future if only has 1 use
-	float	sin_angle;		// May be deleted in future if only has 1 use
+	float			last_angle;
+	float			current_angle;
+	float			angle_speed;
+	float			cos_angle;		// May be deleted in future if only has 1 use
+	float			sin_angle;		// May be deleted in future if only has 1 use
 } t_angle;
 
 typedef struct s_player_move
@@ -162,6 +163,8 @@ typedef struct s_map
 {
 	char	**map;
 	bool	map_started; // Flag to indicate if the map has started
+	int		map_width;
+	int		map_height;
 }	t_map;
 
 typedef struct s_game
@@ -523,6 +526,8 @@ void	draw_square(t_game *cub3d, int size, int x, int y); // TESTING, DON'T USE F
 void	draw_walls(t_game *cub3d);
 void	init_textures(t_game *cub3d);
 t_image	*select_wall_texture(t_game *cub3d, t_coords ray_dir, t_coords ray_pos, int *wall_side);
-void	foo2(t_image *wall_texture, t_coords ray_dir, t_coords ray_pos,
-              float wall_height, float start_y, float end, int angle_column, t_game *cub3d, int wall_side);
+void	render_wall_column(t_image *wall_texture, t_coords ray_dir, t_coords ray_pos,
+                         float wall_height, float start_y, float end, int angle_column, t_game *cub3d, int wall_side);
+void	get_map_size(t_game *cub3d);
+
 #endif
