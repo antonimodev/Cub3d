@@ -6,44 +6,44 @@
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 11:59:58 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/15 14:17:12 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/25 13:26:24 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static void	move_forward_right(t_player_pos *player)
+static void	move_forward_right(t_game *cub3d)
 {
-	move_forward(player);
-	move_right(player);
+	move_forward(cub3d);
+	move_right(cub3d);
 }
 
-static void	move_forward_left(t_player_pos *player)
+static void	move_forward_left(t_game *cub3d)
 {
-	move_forward(player);
-	move_left(player);
+	move_forward(cub3d);
+	move_left(cub3d);
 }
 
-static void	move_back_right(t_player_pos *player)
+static void	move_back_right(t_game *cub3d)
 {
-	move_back(player);
-	move_right(player);
+	move_back(cub3d);
+	move_right(cub3d);
 }
 
-static void	move_back_left(t_player_pos *player)
+static void	move_back_left(t_game *cub3d)
 {
-	move_back(player);
-	move_left(player);
+	move_back(cub3d);
+	move_left(cub3d);
 }
 
-void	advanced_move(t_player_pos *player)
+void	advanced_move(t_game *cub3d)
 {
-	if (player->move.forward && player->move.right)
-		move_forward_right(player);
-	if (player->move.forward && player->move.left)
-		move_forward_left(player);
-	if (player->move.back && player->move.right)
-		move_back_right(player);
-	if (player->move.back && player->move.left)
-		move_back_left(player);
+	if (cub3d->player.move.forward && cub3d->player.move.right)
+		move_forward_right(cub3d);
+	if (cub3d->player.move.forward && cub3d->player.move.left)
+		move_forward_left(cub3d);
+	if (cub3d->player.move.back && cub3d->player.move.right)
+		move_back_right(cub3d);
+	if (cub3d->player.move.back && cub3d->player.move.left)
+		move_back_left(cub3d);
 }

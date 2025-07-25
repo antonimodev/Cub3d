@@ -52,6 +52,7 @@ SRC = src/main.c \
 	src/hooks/player_move/advanced_moves.c \
 	src/hooks/player_move/basic_moves.c \
 	src/hooks/player_move/movement.c \
+	src/hooks/player_move/collision.c \
 	\
 	src/hooks/angles.c \
 	src/hooks/hook.c \

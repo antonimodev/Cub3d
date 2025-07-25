@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frmarian <frmarian@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 10:45:38 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/24 13:53:08 by frmarian         ###   ########.fr       */
+/*   Updated: 2025/07/25 14:12:35 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@
 # include "libft.h"		// For Libft functions
 
 /* DIMENSIONS */
-# define WIDTH	720
-# define HEIGHT	480
+# define WIDTH	1520
+# define HEIGHT	680
 # define BLOCK	64
 
 /* MAP */
@@ -57,7 +57,7 @@
 # define KEY_RELEASED		3
 
 /* DEFAULT VALUES */
-# define ANGLE_SPEED		0.08
+# define ANGLE_SPEED		0.07
 # define PLAYER_SPEED		3
 
 /* ENUMS */
@@ -423,49 +423,49 @@ int		handle_close_window(void *param);
 
 /**
  * Main function that contains diagonal movements logic.
- * @param player Player structure.
+ * @param cub3d Game structure.
  */
-void	advanced_move(t_player_pos *player);
+void	advanced_move(t_game *cub3d);
 
 /* ---------- MOVEMENT.C (1) ---------- */
 
 /**
  * Main function that contains all movement logic
- * @param player Player structure.
+ * @param cub3d Game structure with player and map information.
  */
-void	move_player(t_player_pos *player);
+void	move_player(t_game *cub3d);
 
 /* ---------- BASIC_MOVES.C (5) ---------- */
 
 /**
  * Main function that contains basic movements logic
- * @param player Player structure.
+ * @param cub3d Game structure.
  */
-void	basic_move(t_player_pos *player);
+void	basic_move(t_game *cub3d);
 
 /**
  * Move player forward
- * @param player Player structure.
+ * @param cub3d Game structure.
  */
-void	move_forward(t_player_pos *player);
+void	move_forward(t_game *cub3d);
 
 /**
  * Move player left
- * @param player Player structure.
+ * @param cub3d Game structure.
  */
-void	move_left(t_player_pos *player);
+void	move_left(t_game *cub3d);
 
 /**
  * Move player back
- * @param player Player structure.
+ * @param cub3d Game structure.
  */
-void	move_back(t_player_pos *player);
+void	move_back(t_game *cub3d);
 
 /**
  * Move player right
- * @param player Player structure.
+ * @param cub3d Game structure.
  */
-void	move_right(t_player_pos *player);
+void	move_right(t_game *cub3d);
 
 
 /* ---------- ANGLES.C (4) ---------- */
@@ -517,6 +517,15 @@ void	put_pixel(int x, int y, int color, t_image *image);
  */
 void	raycast(t_game *cub3d);
 
+/**
+ * Check collision for player movement with safety margin
+ * @param new_pos The new position to check
+ * @param map The game map
+ * @param margin Safety margin around the player
+ * @return true if collision detected, false otherwise
+ */
+bool	check_player_collision(t_coords new_pos, t_map *map, float margin);
+
 /* RENDER */
 
 /* ---------- RENDER_BACKGROUND.C (2) ---------- */
@@ -528,12 +537,14 @@ void	draw_background(t_game *cub3d);
 
 
 /* PROBABLY IN THE FUTURE WE'LL CHANGE THE POSITION OF THESE FUCTIONS */
-void	draw_square(t_game *cub3d, int size, int x, int y); // TESTING, DON'T USE FOR :D
-void	draw_walls(t_game *cub3d);
 void	init_textures(t_game *cub3d);
 t_image	*select_wall_texture(t_game *cub3d, t_ray ray_data, int *wall_side);
+t_image	*select_wall_texture_dda(t_game *cub3d, t_ray ray_data, int wall_side);
 void	render_wall_column(t_image *wall_texture, t_ray ray_data,
                          float wall_height, float start_y, float end, int angle_column, t_game *cub3d, int wall_side);
 void	get_map_size(t_game *cub3d);
+void	hooks_setup(t_game *cub3d);
+void	move_with_collision(t_game *cub3d, float delta_x, float delta_y);
+bool	check_player_collision(t_coords new_pos, t_map *map, float margin);
 
 #endif

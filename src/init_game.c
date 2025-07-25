@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_game.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frmarian <frmarian@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 10:53:23 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/24 13:53:50 by frmarian         ###   ########.fr       */
+/*   Updated: 2025/07/25 13:26:19 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,35 +59,11 @@ void	put_pixel(int x, int y, int color, t_image *image)
 	image->data[index + 2] = (color >> 16) & 0xFF;
 }
 
-
-void	draw_square(t_game *cub3d, int size, int x, int y) // TESTING, DON'T USE FOR :D
-{
-	for(int i = 0; i < size; i++) {
-		put_pixel(x, y, 0x004200, &cub3d->image);
-		x++;
-	}
-	for(int i = 0; i < size; i++) {
-		put_pixel(x, y, 0x004200, &cub3d->image);
-		y++;
-	}
-	for(int i = 0; i < size; i++) {
-		put_pixel(x, y, 0x004200, &cub3d->image);
-		x--;
-	}
-	for(int i = 0; i < size; i++) {
-		put_pixel(x, y, 0x004200, &cub3d->image);
-		y--;
-	}
-}
-
 void	render_frame(t_game *cub3d)
 {
-    //clean_canvas(cub3d);
 	draw_background(cub3d);
-	printf("player x: %f, player y: %f \n", cub3d->player.coords.x, cub3d->player.coords.y);
+	//printf("player x: %f, player y: %f \n", cub3d->player.coords.x, cub3d->player.coords.y);
 	raycast(cub3d);
-    //draw_square(cub3d, 10, cub3d->player.coords.x, cub3d->player.coords.y);
-	//draw_walls(cub3d);
     mlx_put_image_to_window(cub3d->mlx, cub3d->window, cub3d->image.ptr, 0, 0);
 }
 
@@ -96,7 +72,7 @@ static int	game_loop(void *param)
 	t_game *cub3d;
 
 	cub3d = (t_game *)param;
-	move_player(&cub3d->player);
+	move_player(cub3d);
 	rotate_player(&cub3d->player);
 	render_frame(cub3d);
 	return (0);
@@ -135,11 +111,16 @@ bool	init_game(t_game *cub3d)
 	init_textures(cub3d); // TESTING
 	get_map_size(cub3d); // Get dimensions of the map
 	scale_coords(&cub3d->player.coords);
+	hooks_setup(cub3d);
+	mlx_put_image_to_window(cub3d->mlx, cub3d->window, cub3d->image.ptr, 0, 0);
+	mlx_loop(cub3d->mlx);
+	return (true);
+}
+
+void	hooks_setup(t_game *cub3d)
+{
 	mlx_hook(cub3d->window, KEY_PRESSED, 1L<<0, handle_key_press, cub3d);
 	mlx_hook(cub3d->window, KEY_RELEASED, 1L<<1, handle_key_release, cub3d);
 	mlx_hook(cub3d->window, CLOSE_WINDOW, 0, handle_close_window, cub3d);
 	mlx_loop_hook(cub3d->mlx, game_loop, cub3d);
-	mlx_put_image_to_window(cub3d->mlx, cub3d->window, cub3d->image.ptr, 0, 0);
-	mlx_loop(cub3d->mlx);
-	return (true);
 }
