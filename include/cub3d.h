@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: frmarian <frmarian@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 10:45:38 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/25 14:12:35 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/28 13:47:33 by frmarian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@
 # include "libft.h"		// For Libft functions
 
 /* DIMENSIONS */
-# define WIDTH	1520
-# define HEIGHT	680
+# define WIDTH	1920
+# define HEIGHT	1080
 # define BLOCK	64
 
 /* MAP */
@@ -36,7 +36,8 @@
 # define WALL	'1'
 
 /* MATHS */
-# define PI		3.1416	// PI with less decimals
+# define PI			3.1416	// PI with less decimals
+# define INFINITE	1e30	// math representation of infinite number	
 
 /* MOVEMENTS */
 # define KEY_W				119
@@ -60,6 +61,8 @@
 # define ANGLE_SPEED		0.07
 # define PLAYER_SPEED		3
 
+# define VERTICAL_HIT		0
+# define HORIZONTAL_HIT		1
 /* ENUMS */
 typedef enum e_texture_type
 {
@@ -125,6 +128,14 @@ typedef struct s_coords
 	float	y;
 } t_coords;
 
+typedef struct s_dda_vars
+{
+	t_coords	map_pos;
+	t_coords	delta_dist;
+	t_coords	step;
+	t_coords	side_dist;
+} t_dda_vars;
+
 typedef struct s_ray
 {
 	t_coords	ray;
@@ -173,19 +184,28 @@ typedef struct s_map
 	int		map_height;
 }	t_map;
 
+typedef struct s_wall
+{
+	float		height;
+	float		start;
+	float		end;
+	int			side;
+} t_wall;
+
 typedef struct s_game
 {
 	void			*mlx;
 	void			*window;
 	t_image			image;
-	t_textures		texture_paths;
 	t_image			wall_no;
 	t_image			wall_so;
 	t_image			wall_ea;
 	t_image			wall_we;
-	t_game_colors	colors;
+	t_textures		texture_paths;
 	t_map			map;
 	t_player_pos	player; // Player position in the map
+	t_ray			ray_data;
+	t_game_colors	colors;
 }	t_game;
 
 /* SRC */
@@ -535,16 +555,20 @@ bool	check_player_collision(t_coords new_pos, t_map *map, float margin);
  */
 void	draw_background(t_game *cub3d);
 
+/* ---------- DDA.C (3) ---------- */
+
 
 /* PROBABLY IN THE FUTURE WE'LL CHANGE THE POSITION OF THESE FUCTIONS */
 void	init_textures(t_game *cub3d);
-t_image	*select_wall_texture(t_game *cub3d, t_ray ray_data, int *wall_side);
-t_image	*select_wall_texture_dda(t_game *cub3d, t_ray ray_data, int wall_side);
-void	render_wall_column(t_image *wall_texture, t_ray ray_data,
-                         float wall_height, float start_y, float end, int angle_column, t_game *cub3d, int wall_side);
+t_image	*select_wall_texture(t_game *cub3d, int wall_side);
+void	render_wall_column(t_image *wall_texture, t_game *cub3d, t_wall wall, float angle_column);
 void	get_map_size(t_game *cub3d);
 void	hooks_setup(t_game *cub3d);
 void	move_with_collision(t_game *cub3d, float delta_x, float delta_y);
 bool	check_player_collision(t_coords new_pos, t_map *map, float margin);
+
+/* DDA.C */
+t_ray	cast_ray_dda(t_coords start, float cos_angle, float sin_angle, t_map map);
+
 
 #endif

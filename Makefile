@@ -45,6 +45,7 @@ SRC = src/main.c \
 	\
 	src/raycasting/raycasting.c \
 	src/raycasting/raycast_utils.c \
+	src/raycasting/dda.c \
 	\
 	src/render/render_background.c \
 	src/render/render_walls.c \
