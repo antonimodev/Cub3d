@@ -46,9 +46,13 @@ SRC = src/main.c \
 	src/raycasting/raycasting.c \
 	src/raycasting/raycast_utils.c \
 	src/raycasting/dda.c \
+	src/raycasting/dda_impact.c \
+	src/raycasting/dda_utils.c \
 	\
 	src/render/render_background.c \
-	src/render/render_walls.c \
+	src/render/textures.c \
+	src/render/columns.c \
+	src/render/render.c \
 	\
 	src/hooks/player_move/advanced_moves.c \
 	src/hooks/player_move/basic_moves.c \

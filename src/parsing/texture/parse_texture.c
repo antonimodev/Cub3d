@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_texture.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: frmarian <frmarian@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 11:42:12 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/18 13:55:44 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/29 13:37:41 by frmarian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static bool	validate_texture_extension(const char *filename)
 }
 
 bool	process_texture_line(char *line, const char *prefix, t_tex_type type,
-	t_game *cub3d)
+		t_game *cub3d)
 {
 	char	*clean_path;
 
@@ -52,25 +52,16 @@ bool	process_texture_line(char *line, const char *prefix, t_tex_type type,
 	if (!clean_path || ft_strlen(clean_path) == 0)
 	{
 		write_error("Empty texture path\n");
-		free(clean_path);
-		return (false);
+		return (free(clean_path), false);
 	}
 	if (!validate_texture_extension(clean_path))
-	{
-		free(clean_path);
-		return (false);
-	}
+		return (free(clean_path), false);
 	if (!validate_file_access(clean_path))
 	{
 		write_error("Invalid texture path\n");
-		free(clean_path);
-		return (false);
+		return (free(clean_path), false);
 	}
 	if (!store_texture_path(clean_path, type, cub3d))
-	{
-		free(clean_path);
-		return (false);
-	}
-	free(clean_path);
-	return (true);
+		return (free(clean_path), false);
+	return (free(clean_path), true);
 }

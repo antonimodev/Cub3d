@@ -6,7 +6,7 @@
 /*   By: frmarian <frmarian@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 10:45:38 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/28 13:47:33 by frmarian         ###   ########.fr       */
+/*   Updated: 2025/07/29 14:19:14 by frmarian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,55 +14,55 @@
 # define CUB3D_H
 
 /* INCLUDES */
-# include <math.h>		// For mathematical functions
-# include <stddef.h>	// For NULL
-# include <unistd.h>	// For read, write, close
-# include <fcntl.h>		// For open
-# include <stdio.h>		// For printf, perror
-# include <stdlib.h>	// For malloc, free, exit
-# include <string.h>	// For strerror
-# include <sys/time.h>	// For gettimeofday
-# include <stdbool.h>	// For bool, true, false
-# include "mlx.h"		// For MiniLibX functions
-# include "libft.h"		// For Libft functions
+# include "libft.h"    // For Libft functions
+# include "mlx.h"      // For MiniLibX functions
+# include <fcntl.h>    // For open
+# include <math.h>     // For mathematical functions
+# include <stdbool.h>  // For bool, true, false
+# include <stddef.h>   // For NULL
+# include <stdio.h>    // For printf, perror
+# include <stdlib.h>   // For malloc, free, exit
+# include <string.h>   // For strerror
+# include <sys/time.h> // For gettimeofday
+# include <unistd.h>   // For read, write, close
 
 /* DIMENSIONS */
-# define WIDTH	1920
-# define HEIGHT	1080
-# define BLOCK	64
+# define WIDTH 1920
+# define HEIGHT 1080
+# define BLOCK 64
 
 /* MAP */
-# define FLOOR	'0'
-# define WALL	'1'
+# define FLOOR '0'
+# define WALL '1'
 
 /* MATHS */
-# define PI			3.1416	// PI with less decimals
-# define INFINITE	1e30	// math representation of infinite number	
+# define PI 3.1416     // PI with less decimals
+# define INFINITE 1e30 // math representation of infinite number
 
 /* MOVEMENTS */
-# define KEY_W				119
-# define KEY_A				97
-# define KEY_S				115
-# define KEY_D				100
+# define KEY_W 119
+# define KEY_A 97
+# define KEY_S 115
+# define KEY_D 100
 
 /* ROTATIONS */
-# define KEY_LEFT  			65361
-# define KEY_RIGHT 			65363
+# define KEY_LEFT 65361
+# define KEY_RIGHT 65363
 
 /* QUIT */
-# define KEY_ESC  			65307
+# define KEY_ESC 65307
 
 /* EVENTS */
-# define CLOSE_WINDOW		17
-# define KEY_PRESSED		2
-# define KEY_RELEASED		3
+# define CLOSE_WINDOW 17
+# define KEY_PRESSED 2
+# define KEY_RELEASED 3
 
 /* DEFAULT VALUES */
-# define ANGLE_SPEED		0.07
-# define PLAYER_SPEED		3
+# define ANGLE_SPEED 0.07
+# define PLAYER_SPEED 3
 
-# define VERTICAL_HIT		0
-# define HORIZONTAL_HIT		1
+# define VERTICAL_HIT 0
+# define HORIZONTAL_HIT 1
 /* ENUMS */
 typedef enum e_texture_type
 {
@@ -70,7 +70,7 @@ typedef enum e_texture_type
 	TEXTURE_SOUTH,
 	TEXTURE_EAST,
 	TEXTURE_WEST
-}	t_tex_type;
+}					t_tex_type;
 
 typedef enum e_player_direction
 {
@@ -78,119 +78,142 @@ typedef enum e_player_direction
 	SOUTH = 'S',
 	EAST = 'E',
 	WEST = 'W'
-}	t_direction;
+}					t_direction;
 
 typedef enum e_color_type
 {
 	COLOR_FLOOR,
 	COLOR_CEILING
-}	t_color_type;
+}					t_color_type;
 
 /* STRUCTURES */
 
+typedef struct s_render_params
+{
+	char			*img_data;
+	char			*tex_data;
+	int				img_bpp_bytes;
+	int				tex_bpp_bytes;
+	int				img_line_size;
+	int				tex_line_size;
+	int				tex_height;
+	int				tex_x_offset;
+	int				img_x_offset;
+	float			tex_step;
+	float			tex_pos;
+}					t_render_params;
+
 typedef struct s_image
 {
-	char	*data;		// added
-	void	*ptr;
-	int		size_line;	// added
-	int		bpp;		// added
-	int		endian;		// added
-	int		height;
-	int		width;
-} t_image;
+	char			*data;
+	void			*ptr;
+	int				size_line;
+	int				bpp;
+	int				endian;
+	int				height;
+	int				width;
+}					t_image;
 
 typedef struct s_player_angle
 {
 	float			last_angle;
 	float			current_angle;
 	float			angle_speed;
-	float			cos_angle;		// May be deleted in future if only has 1 use
-	float			sin_angle;		// May be deleted in future if only has 1 use
-} t_angle;
+	float			cos_angle;
+	float			sin_angle;
+}					t_angle;
 
 typedef struct s_player_move
 {
-	bool	forward;
-	bool	back;
-	bool	left;
-	bool	right;
-}	t_move;
+	bool			forward;
+	bool			back;
+	bool			left;
+	bool			right;
+}					t_move;
 
 typedef struct s_player_rotate
 {
-	bool	left;
-	bool	right;
-}	t_rotate;
+	bool			left;
+	bool			right;
+}					t_rotate;
 
 typedef struct s_coords
 {
-	float	x;
-	float	y;
-} t_coords;
+	float			x;
+	float			y;
+}					t_coords;
+
+typedef struct s_calc_data
+{
+	t_coords	map_pos;
+	t_coords	start;
+	t_coords	step;
+	int			side;
+}	t_calc_data;
 
 typedef struct s_dda_vars
 {
-	t_coords	map_pos;
-	t_coords	delta_dist;
-	t_coords	step;
-	t_coords	side_dist;
-} t_dda_vars;
+	t_coords		map_pos;
+	t_coords		delta_dist;
+	t_coords		step;
+	t_coords		side_dist;
+}					t_dda_vars;
 
 typedef struct s_ray
 {
-	t_coords	ray;
-	t_coords	impact;	// Impact point of the ray
-	t_coords	relative;	// Relative position of the ray
-	t_coords	dir;	// Direction of the ray
-} t_ray;
+	t_coords		ray;
+	t_coords		impact;
+	t_coords		relative;
+	t_coords		dir;
+}					t_ray;
 
 typedef struct s_player_pos
 {
-	t_coords	coords;
-	t_angle		angle;
-	t_direction	dir;
-	t_move		move;
-	t_rotate	rotate;
-}	t_player_pos;
+	t_coords		coords;
+	t_angle			angle;
+	t_direction		dir;
+	t_move			move;
+	t_rotate		rotate;
+}					t_player_pos;
 
-typedef struct s_textures // Testing about store texture paths
+typedef struct s_textures
 {
-	char	*no; // North texture path
-	char	*so; // South texture path
-	char	*ea; // East texture path
-	char	*we; // West texture path
-}	t_textures;
+	char			*no;
+	char			*so;
+	char			*ea;
+	char			*we;
+}					t_textures;
 
-typedef struct s_colors // Testing about store colors
+typedef struct s_colors
 {
-	int	red;
-	int	green;
-	int	blue;
-}	t_colors;
+	int				red;
+	int				green;
+	int				blue;
+}					t_colors;
 
 typedef struct s_game_colors
 {
-	t_colors	floor; // Floor color
-	t_colors	ceiling; // Ceiling color
-	bool		floor_set; // Flag to track if floor color is set
-	bool		ceiling_set; // Flag to track if ceiling color is set
-}	t_game_colors;
+	t_colors		floor;
+	t_colors		ceiling;
+	bool			floor_set;
+	bool			ceiling_set;
+}					t_game_colors;
 
 typedef struct s_map
 {
-	char	**map;
-	bool	map_started; // Flag to indicate if the map has started
-	int		map_width;
-	int		map_height;
-}	t_map;
+	char			**map;
+	bool			map_started;
+	int				map_width;
+	int				map_height;
+}					t_map;
 
 typedef struct s_wall
 {
-	float		height;
-	float		start;
-	float		end;
-	int			side;
-} t_wall;
+	float			height;
+	float			start;
+	float			end;
+	int				side;
+}					t_wall;
 
 typedef struct s_game
 {
@@ -203,10 +226,10 @@ typedef struct s_game
 	t_image			wall_we;
 	t_textures		texture_paths;
 	t_map			map;
-	t_player_pos	player; // Player position in the map
+	t_player_pos	player;
 	t_ray			ray_data;
 	t_game_colors	colors;
-}	t_game;
+}					t_game;
 
 /* SRC */
 
@@ -221,14 +244,14 @@ typedef struct s_game
  * @param av Matrix of arguments
  * @return true if arguments are valid, false otherwise
  */
-bool	validate_args(int ac, char **av); // Validate command line arguments
+bool				validate_args(int ac, char **av);
 
 /**
  * Checks if the file exists and can be opened for reading.
  * @param filename Name of the file to validate
  * @return true if file can be accessed, false otherwise
  */
-bool	validate_file_access(const char *filename);
+bool				validate_file_access(const char *filename);
 
 /* ---------- ERROR.C (1) ---------- */
 
@@ -236,7 +259,7 @@ bool	validate_file_access(const char *filename);
  * Writes an error message to the standard error output.
  * @param message The error message to write
  */
-void	write_error(const char *message);
+void				write_error(const char *message);
 
 /* ---------- INIT_GAME.C (4) ---------- */
 
@@ -247,11 +270,11 @@ void	write_error(const char *message);
  * @param cub3d Pointer to the game structure
  * @return true if initialization is successful, false otherwise
  */
-bool	init_game(t_game *cub3d); // Initialize game parameters
+bool				init_game(t_game *cub3d);
 
 /* ---------- CLEAN.C (4) --------- */
 
-void	cleanup_game(t_game *cub3d); // Clean up resources
+void				cleanup_game(t_game *cub3d);
 
 /* PARSING */
 
@@ -264,7 +287,7 @@ void	cleanup_game(t_game *cub3d); // Clean up resources
  * @param cub3d Pointer to the game structure to fill
  * @return true if parsing is successful, false otherwise
  */
-bool	parsing(char **av, t_game *cub3d);
+bool				parsing(char **av, t_game *cub3d);
 
 /**
  * Processes each line of the .cub file and extracts relevant data.
@@ -272,7 +295,7 @@ bool	parsing(char **av, t_game *cub3d);
  * @param cub3d Pointer to the game structure to fill
  * @return true if line processing is successful, false otherwise
  */
-bool	parse_line(int *fd, t_game *cub3d);
+bool				parse_line(int *fd, t_game *cub3d);
 
 /**
  * Processes each line of the .cub file and extracts relevant data.
@@ -280,14 +303,14 @@ bool	parse_line(int *fd, t_game *cub3d);
  * @param cub3d Pointer to the game structure to fill
  * @return true if line processing is successful, false otherwise
  */
-bool	get_data_from_line(char *line, t_game *cub3d);
+bool				get_data_from_line(char *line, t_game *cub3d);
 
 /**
  * Validates that all required parsing elements are complete and properly set.
  * @param cub3d Pointer to the game structure to validate
  * @return true if all required elements are present, false otherwise
  */
-bool	validate_assigned_params(t_game *cub3d);
+bool				validate_assigned_params(t_game *cub3d);
 
 /* COLOR */
 
@@ -299,7 +322,7 @@ bool	validate_assigned_params(t_game *cub3d);
  * @param cub3d Pointer to the game structure to fill
  * @return true if color processing is successful, false otherwise
  */
-bool	get_color(char *line, t_game *cub3d);
+bool				get_color(char *line, t_game *cub3d);
 
 /**
  * Processes color lines (F, C).
@@ -309,8 +332,8 @@ bool	get_color(char *line, t_game *cub3d);
  * @param cub3d Pointer to the game structure to fill
  * @return true if color processing is successful, false otherwise
  */
-bool	process_color_line(char *line, const char *prefix, t_color_type type,
-			t_game *cub3d);
+bool				process_color_line(char *line, const char *prefix,
+						t_color_type type, t_game *cub3d);
 
 /* ---------- COLOR_STORAGE.C (4) ---------- */
 
@@ -321,8 +344,8 @@ bool	process_color_line(char *line, const char *prefix, t_color_type type,
  * @param cub3d Pointer to the game structure to fill
  * @return true if color values are valid and stored successfully
  */
-bool	validate_and_store_color(char **color_values, t_color_type type,
-			t_game *cub3d);
+bool				validate_and_store_color(char **color_values,
+						t_color_type type, t_game *cub3d);
 
 /* MAP */
 
@@ -337,7 +360,7 @@ bool	validate_and_store_color(char **color_values, t_color_type type,
  * @param map The map to validate
  * @return true if the map is properly enclosed, false otherwise
  */
-bool	validate_flood_fill(int x, int y, char **map);
+bool				validate_flood_fill(int x, int y, char **map);
 
 /* ---------- MAP_STORAGE.C (3) ---------- */
 
@@ -349,7 +372,7 @@ bool	validate_flood_fill(int x, int y, char **map);
  * @param cub3d Pointer to the game structure to fill
  * @return true if map processing is successful, false otherwise
  */
-bool	get_map_data(char *line, t_game *cub3d);
+bool				get_map_data(char *line, t_game *cub3d);
 
 /* ---------- MAP_VALIDATION.C (5) ---------- */
 
@@ -359,7 +382,7 @@ bool	get_map_data(char *line, t_game *cub3d);
  * @param cub3d Pointer to the game structure to validate
  * @return true if the map is valid, false otherwise
  */
-bool	validate_map_enclosed(t_game *cub3d);
+bool				validate_map_enclosed(t_game *cub3d);
 
 /**
  * Validates that the map contains exactly one player character (N, S, E, W).
@@ -367,7 +390,7 @@ bool	validate_map_enclosed(t_game *cub3d);
  * @param cub3d Pointer to the game structure to validate
  * @return true if the player is found and valid, false otherwise
  */
-bool	find_and_validate_player(t_game *cub3d);
+bool				find_and_validate_player(t_game *cub3d);
 
 /**
  * Validates that the map is complete and properly enclosed.
@@ -376,7 +399,7 @@ bool	find_and_validate_player(t_game *cub3d);
  * @param cub3d Pointer to the game structure to validate
  * @return true if the map is valid, false otherwise
  */
-bool	validate_complete_map(t_game *cub3d);
+bool				validate_complete_map(t_game *cub3d);
 
 /* TEXTURE */
 
@@ -388,7 +411,7 @@ bool	validate_complete_map(t_game *cub3d);
  * @param cub3d Pointer to the game structure to fill
  * @return true if texture processing is successful, false otherwise
  */
-bool	get_texture_path(char *line, t_game *cub3d);
+bool				get_texture_path(char *line, t_game *cub3d);
 
 /**
  * Processes texture path lines (NO, SO, EA, WE).
@@ -398,8 +421,8 @@ bool	get_texture_path(char *line, t_game *cub3d);
  * @param cub3d Pointer to the game structure to fill
  * @return true if texture processing is successful, false otherwise
  */
-bool	process_texture_line(char *line, const char *prefix, t_tex_type type,
-			t_game *cub3d);
+bool				process_texture_line(char *line, const char *prefix,
+						t_tex_type type, t_game *cub3d);
 
 /* ---------- TEXTURE_STORAGE.C (5) ---------- */
 
@@ -410,7 +433,8 @@ bool	process_texture_line(char *line, const char *prefix, t_tex_type type,
  * @param cub3d Pointer to the game structure to fill
  * @return true if stored successfully, false if duplicate found
  */
-bool	store_texture_path(const char *path, t_tex_type type, t_game *cub3d);
+bool				store_texture_path(const char *path, t_tex_type type,
+						t_game *cub3d);
 
 /* HOOKS */
 
@@ -421,21 +445,21 @@ bool	store_texture_path(const char *path, t_tex_type type, t_game *cub3d);
  * @param param Pointer to the game structure
  * @return ???
  */
-int		handle_key_press(int key, void *param);
+int					handle_key_press(int key, void *param);
 
 /**
  * Handle key release event.
  * @param param Pointer to the game structure
  * @return ???
  */
-int		handle_key_release(int key, void *param);
+int					handle_key_release(int key, void *param);
 
 /**
  * Handle close button event to close the window.
  * @param param Pointer to the game structure
  * @return
  */
-int		handle_close_window(void *param);
+int					handle_close_window(void *param);
 
 /* PLAYER_MOVE */
 
@@ -445,7 +469,7 @@ int		handle_close_window(void *param);
  * Main function that contains diagonal movements logic.
  * @param cub3d Game structure.
  */
-void	advanced_move(t_game *cub3d);
+void				advanced_move(t_game *cub3d);
 
 /* ---------- MOVEMENT.C (1) ---------- */
 
@@ -453,7 +477,7 @@ void	advanced_move(t_game *cub3d);
  * Main function that contains all movement logic
  * @param cub3d Game structure with player and map information.
  */
-void	move_player(t_game *cub3d);
+void				move_player(t_game *cub3d);
 
 /* ---------- BASIC_MOVES.C (5) ---------- */
 
@@ -461,32 +485,31 @@ void	move_player(t_game *cub3d);
  * Main function that contains basic movements logic
  * @param cub3d Game structure.
  */
-void	basic_move(t_game *cub3d);
+void				basic_move(t_game *cub3d);
 
 /**
  * Move player forward
  * @param cub3d Game structure.
  */
-void	move_forward(t_game *cub3d);
+void				move_forward(t_game *cub3d);
 
 /**
  * Move player left
  * @param cub3d Game structure.
  */
-void	move_left(t_game *cub3d);
+void				move_left(t_game *cub3d);
 
 /**
  * Move player back
  * @param cub3d Game structure.
  */
-void	move_back(t_game *cub3d);
+void				move_back(t_game *cub3d);
 
 /**
  * Move player right
  * @param cub3d Game structure.
  */
-void	move_right(t_game *cub3d);
-
+void				move_right(t_game *cub3d);
 
 /* ---------- ANGLES.C (4) ---------- */
 
@@ -494,14 +517,14 @@ void	move_right(t_game *cub3d);
  * Initialize player angle based on his orientation (N,S,E,W)
  * @param cub3d Game structure.
  */
-void	init_angles(t_player_pos *player);
+void				init_angles(t_player_pos *player);
 
 /**
  * Normalize angles if they're greater than 360º or
  * less than 0º
  * @param cub3d Game structure.
  */
-void	normalize_angle(t_player_pos *player);
+void				normalize_angle(t_player_pos *player);
 
 /* ---------- ROTATE.C (4) ---------- */
 
@@ -509,24 +532,23 @@ void	normalize_angle(t_player_pos *player);
  * Main function that contains rotating player logic
  * @param cub3d Game structure.
  */
-void	rotate_player(t_player_pos *player);
+void				rotate_player(t_player_pos *player);
 
 /**
  * Rotate player to left direction
  * @param cub3d Game structure.
  */
-void	rotate_left(t_player_pos *player);
+void				rotate_left(t_player_pos *player);
 
 /**
  * Rotate player to right direction
  * @param cub3d Game structure.
  */
-void	rotate_right(t_player_pos *player);
+void				rotate_right(t_player_pos *player);
 
 /* TO SET SOMEWHERE */
-void	render_frame(t_game *cub3d);
-void	put_pixel(int x, int y, int color, t_image *image);
-
+void				render_frame(t_game *cub3d);
+void				put_pixel(int x, int y, int color, t_image *image);
 
 /* RAYCASTING */
 
@@ -535,7 +557,7 @@ void	put_pixel(int x, int y, int color, t_image *image);
 /**
  * WRITE HERE
  */
-void	raycast(t_game *cub3d);
+void				raycast(t_game *cub3d);
 
 /**
  * Check collision for player movement with safety margin
@@ -544,7 +566,8 @@ void	raycast(t_game *cub3d);
  * @param margin Safety margin around the player
  * @return true if collision detected, false otherwise
  */
-bool	check_player_collision(t_coords new_pos, t_map *map, float margin);
+bool				check_player_collision(t_coords new_pos, t_map *map,
+						float margin);
 
 /* RENDER */
 
@@ -553,22 +576,48 @@ bool	check_player_collision(t_coords new_pos, t_map *map, float margin);
 /**
  * WRITE HERE
  */
-void	draw_background(t_game *cub3d);
+void				draw_background(t_game *cub3d);
 
 /* ---------- DDA.C (3) ---------- */
 
-
 /* PROBABLY IN THE FUTURE WE'LL CHANGE THE POSITION OF THESE FUCTIONS */
-void	init_textures(t_game *cub3d);
-t_image	*select_wall_texture(t_game *cub3d, int wall_side);
-void	render_wall_column(t_image *wall_texture, t_game *cub3d, t_wall wall, float angle_column);
-void	get_map_size(t_game *cub3d);
-void	hooks_setup(t_game *cub3d);
-void	move_with_collision(t_game *cub3d, float delta_x, float delta_y);
-bool	check_player_collision(t_coords new_pos, t_map *map, float margin);
+void				init_textures(t_game *cub3d);
+t_image				*select_wall_texture(t_game *cub3d, int wall_side);
+void				render_wall_column(t_image *wall_texture, t_game *cub3d,
+						t_wall wall, float angle_column);
+void				get_map_size(t_game *cub3d);
+void				hooks_setup(t_game *cub3d);
+void				move_with_collision(t_game *cub3d, float delta_x,
+						float delta_y);
+bool				check_player_collision(t_coords new_pos, t_map *map,
+						float margin);
 
-/* DDA.C */
-t_ray	cast_ray_dda(t_coords start, float cos_angle, float sin_angle, t_map map);
+void	render_all_columns(t_game *cub3d, float *cos_cache, float *sin_cache);
+int	game_loop(void *param);
+void	scale_coords(t_coords *coords);
+void	draw_3d_cached(t_game *cub3d, int angle_column, float cos_angle,
+		float sin_angle);
+int		clamp_texture_coords(int coordinate, int max_value);
+void	flip_texture(float wall_side, float *wall_x, t_coords ray_dir);
 
+t_ray				cast_ray_dda(t_coords start, float cos_angle,
+						float sin_angle, t_map map);
+void	init_dda_vars(t_dda_vars *vars, t_coords start, float cos_angle,
+		float sin_angle);
+void	calc_impact(int side, t_coords start, t_dda_vars vars, t_ray *result);
+
+/**
+ * @brief Calculates the X coordinate (column) in the texture that corresponds
+ * to the ray impact point on the wall
+ *
+ * @param wall_texture The wall texture image
+ * @param ray_data Ray information including impact point and direction
+ * @param wall_side Whether the ray hit a vertical or horizontal wall face
+ * @return int X coordinate in texture pixels (0 to (texture_width - 1))
+ */
+int	get_texture_column(t_image *wall_texture, t_ray ray_data,
+		int wall_side);
+
+void	calc_y_bounds(t_wall wall, int *y_start, int *y_end);
 
 #endif

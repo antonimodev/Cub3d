@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   collision.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: frmarian <frmarian@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 13:24:51 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/25 13:51:31 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/29 12:11:12 by frmarian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static bool collision(t_coords ray, t_map *map)
+static bool	collision(t_coords ray, t_map *map)
 {
-	int x;
-	int y;
+	int	x;
+	int	y;
 
 	x = (int)(ray.x / BLOCK);
 	y = (int)(ray.y / BLOCK);

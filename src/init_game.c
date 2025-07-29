@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_game.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: frmarian <frmarian@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 10:53:23 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/25 13:26:19 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/29 13:42:08 by frmarian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,48 +45,15 @@ static bool	init_image(t_game *cub3d)
 	return (true);
 }
 
-// TO ORGANIZE:
-
-void	put_pixel(int x, int y, int color, t_image *image)
+int	game_loop(void *param)
 {
-	int index;
-
-	if (x >= WIDTH || y >= HEIGHT || x < 0 || y < 0)
-		return;
-	index = y * image->size_line + x * image->bpp / 8;
-	image->data[index] = color & 0xFF;
-	image->data[index + 1] = (color >> 8) & 0xFF;
-	image->data[index + 2] = (color >> 16) & 0xFF;
-}
-
-void	render_frame(t_game *cub3d)
-{
-	draw_background(cub3d);
-	//printf("player x: %f, player y: %f \n", cub3d->player.coords.x, cub3d->player.coords.y);
-	raycast(cub3d);
-    mlx_put_image_to_window(cub3d->mlx, cub3d->window, cub3d->image.ptr, 0, 0);
-}
-
-static int	game_loop(void *param)
-{
-	t_game *cub3d;
+	t_game	*cub3d;
 
 	cub3d = (t_game *)param;
 	move_player(cub3d);
 	rotate_player(&cub3d->player);
 	render_frame(cub3d);
 	return (0);
-}
-
-/* --------------------------------------------- */
-
-static void scale_coords(t_coords *coords)
-{
-	int temp_coord;
-
-	temp_coord = coords->x;
-    coords->x = coords->y * BLOCK + BLOCK / 2;
-	coords->y = temp_coord * BLOCK + BLOCK / 2;
 }
 
 bool	init_game(t_game *cub3d)
@@ -106,21 +73,14 @@ bool	init_game(t_game *cub3d)
 		cleanup_game(cub3d);
 		return (false);
 	}
-	cub3d->image.data = mlx_get_data_addr(cub3d->image.ptr, &cub3d->image.bpp, &cub3d->image.size_line, &cub3d->image.endian);
+	cub3d->image.data = mlx_get_data_addr(cub3d->image.ptr, &cub3d->image.bpp,
+			&cub3d->image.size_line, &cub3d->image.endian);
 	init_angles(&cub3d->player);
-	init_textures(cub3d); // TESTING
-	get_map_size(cub3d); // Get dimensions of the map
+	init_textures(cub3d);
+	get_map_size(cub3d);
 	scale_coords(&cub3d->player.coords);
 	hooks_setup(cub3d);
 	mlx_put_image_to_window(cub3d->mlx, cub3d->window, cub3d->image.ptr, 0, 0);
 	mlx_loop(cub3d->mlx);
 	return (true);
-}
-
-void	hooks_setup(t_game *cub3d)
-{
-	mlx_hook(cub3d->window, KEY_PRESSED, 1L<<0, handle_key_press, cub3d);
-	mlx_hook(cub3d->window, KEY_RELEASED, 1L<<1, handle_key_release, cub3d);
-	mlx_hook(cub3d->window, CLOSE_WINDOW, 0, handle_close_window, cub3d);
-	mlx_loop_hook(cub3d->mlx, game_loop, cub3d);
 }

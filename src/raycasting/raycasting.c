@@ -6,28 +6,11 @@
 /*   By: frmarian <frmarian@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 13:18:40 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/28 13:01:18 by frmarian         ###   ########.fr       */
+/*   Updated: 2025/07/29 13:42:10 by frmarian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-void	get_map_size(t_game *cub3d)
-{
-	int	current_line;
-	int	x;
-
-	current_line = 0;
-	x = 0;
-	while (cub3d->map.map[x])
-	{
-		current_line = ft_strlen(cub3d->map.map[x]);
-		if (current_line > cub3d->map.map_width)
-			cub3d->map.map_width = current_line;
-		x++;
-	}
-	cub3d->map.map_height = x;
-}
 
 static void	calc_column_bounds(t_wall *wall)
 {
@@ -35,7 +18,8 @@ static void	calc_column_bounds(t_wall *wall)
 	wall->end = wall->start + wall->height;
 }
 
-static float	get_wall_height(float cos_angle, float sin_angle, float current_angle, t_ray ray_data)
+static float	get_wall_height(float cos_angle, float sin_angle,
+		float current_angle, t_ray ray_data)
 {
 	float	angle_diff;
 	float	fixed_dist;
@@ -47,21 +31,25 @@ static float	get_wall_height(float cos_angle, float sin_angle, float current_ang
 	return ((BLOCK * projection_distance) / fixed_dist);
 }
 
-static void	draw_3d_cached(t_game *cub3d, int angle_column, float cos_angle, float sin_angle)
+void	draw_3d_cached(t_game *cub3d, int angle_column, float cos_angle,
+		float sin_angle)
 {
 	t_wall	wall;
-	t_image *wall_texture;
+	t_image	*wall_texture;
 
-	cub3d->ray_data = cast_ray_dda(cub3d->player.coords, cos_angle, sin_angle, cub3d->map);
+	cub3d->ray_data = cast_ray_dda(cub3d->player.coords, cos_angle, sin_angle,
+			cub3d->map);
 	wall.side = (int)cub3d->ray_data.ray.x;
 	wall_texture = select_wall_texture(cub3d, wall.side);
-	cub3d->ray_data.ray = cub3d->ray_data.impact;  // Restore proper impact point
-	wall.height = get_wall_height(cos_angle, sin_angle, cub3d->player.angle.current_angle, cub3d->ray_data);
+	cub3d->ray_data.ray = cub3d->ray_data.impact;
+	wall.height = get_wall_height(cos_angle, sin_angle,
+			cub3d->player.angle.current_angle, cub3d->ray_data);
 	calc_column_bounds(&wall);
 	render_wall_column(wall_texture, cub3d, wall, angle_column);
 }
 
-static void	init_angle_cache(float *cos_cache, float *sin_cache, float angle_start, float delta_angle)
+static void	init_angle_cache(float *cos_cache, float *sin_cache,
+		float angle_start, float delta_angle)
 {
 	float	current_angle;
 	int		i;
@@ -77,27 +65,15 @@ static void	init_angle_cache(float *cos_cache, float *sin_cache, float angle_sta
 	}
 }
 
-static void	render_all_columns(t_game *cub3d, float *cos_cache, float *sin_cache)
-{
-	int	angle_column;
-
-	angle_column = 0;
-	while (angle_column < WIDTH) // Render all columns into WIDTH of the screen
-	{
-		draw_3d_cached(cub3d, angle_column, cos_cache[angle_column], sin_cache[angle_column]);
-		angle_column++;
-	}
-}
-
 void	raycast(t_game *cub3d)
 {
 	float	angle_start;
-	float   delta_angle;
+	float	delta_angle;
 	float	cos_cache[WIDTH];
 	float	sin_cache[WIDTH];
 
-	angle_start = cub3d->player.angle.current_angle - PI / 6; // -30º
-	delta_angle = (PI / 3) / WIDTH; // 60º / WIDTH = Xº per column
+	angle_start = cub3d->player.angle.current_angle - PI / 6;
+	delta_angle = (PI / 3) / WIDTH;
 	init_angle_cache(cos_cache, sin_cache, angle_start, delta_angle);
 	render_all_columns(cub3d, cos_cache, sin_cache);
 }

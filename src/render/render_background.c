@@ -6,7 +6,7 @@
 /*   By: frmarian <frmarian@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 12:21:41 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/23 12:11:30 by frmarian         ###   ########.fr       */
+/*   Updated: 2025/07/29 13:50:06 by frmarian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	color_to_hex(t_colors color)
 {
-    return ((color.red << 16) | (color.green << 8) | color.blue);
+	return ((color.red << 16) | (color.green << 8) | color.blue);
 }
 
 void	draw_background(t_game *cub3d)

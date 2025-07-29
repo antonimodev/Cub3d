@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_storage.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: frmarian <frmarian@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 11:44:33 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/07 12:55:54 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/29 13:23:58 by frmarian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,21 @@ bool	get_map_data(char *line, t_game *cub3d)
 		return (false);
 	}
 	return (true);
+}
+
+void	get_map_size(t_game *cub3d)
+{
+	int	current_line;
+	int	x;
+
+	current_line = 0;
+	x = 0;
+	while (cub3d->map.map[x])
+	{
+		current_line = ft_strlen(cub3d->map.map[x]);
+		if (current_line > cub3d->map.map_width)
+			cub3d->map.map_width = current_line;
+		x++;
+	}
+	cub3d->map.map_height = x;
 }
