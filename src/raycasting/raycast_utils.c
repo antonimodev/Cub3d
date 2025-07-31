@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frmarian <frmarian@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 13:10:58 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/29 14:16:20 by frmarian         ###   ########.fr       */
+/*   Updated: 2025/07/31 13:05:41 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	get_texture_column(t_image *wall_texture, t_ray ray_data,
 	return (clamp_texture_coords(texture_column, wall_texture->width));
 }
 
-void	calc_y_bounds(t_wall wall, int *y_start, int *y_end)
+void	clamp_height_bounds(t_wall wall, int *y_start, int *y_end)
 {
 	*y_start = (int)floor(wall.start);
 	*y_end = (int)ceil(wall.end);

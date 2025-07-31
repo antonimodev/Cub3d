@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dda.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frmarian <frmarian@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 12:56:38 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/29 14:19:38 by frmarian         ###   ########.fr       */
+/*   Updated: 2025/07/31 13:24:43 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@ static void	jump_next_grid(t_dda_vars *vars, int *side)
 	{
 		vars->side_dist.x += vars->delta_dist.x;
 		vars->map_pos.x += vars->step.x;
-		*side = 0;
+		*side = VERTICAL_HIT;
 	}
 	else
 	{
 		vars->side_dist.y += vars->delta_dist.y;
 		vars->map_pos.y += vars->step.y;
-		*side = 1;
+		*side = HORIZONTAL_HIT;
 	}
 }
 
@@ -59,7 +59,6 @@ t_ray	cast_ray_dda(t_coords start, float cos_angle, float sin_angle,
 			hit = 1;
 	}
 	calc_impact(side, start, vars, &result);
-	result.relative.y = 0;
 	result.ray.x = side;
 	return (result);
 }

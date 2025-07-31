@@ -31,6 +31,7 @@ SRC = src/main.c \
 	src/arg_validation.c \
 	src/error.c \
 	src/init_game.c \
+	src/textures.c \
 	\
 	src/parsing/main_parse.c \
 	src/parsing/color/parse_color.c \
@@ -50,8 +51,7 @@ SRC = src/main.c \
 	src/raycasting/dda_utils.c \
 	\
 	src/render/render_background.c \
-	src/render/textures.c \
-	src/render/columns.c \
+	src/render/render_columns.c \
 	src/render/render.c \
 	\
 	src/hooks/player_move/advanced_moves.c \
@@ -89,7 +89,7 @@ $(OBJ_DIR)/%.o: %.c
 
 valgrind: re
 	@echo "⚙️  Running Valgrind...\n"
-	@valgrind ./$(NAME) maps/map03.cub
+	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(NAME) maps/map03.cub
 
 pull:
 	@git pull && git submodule update --init --recursive

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frmarian <frmarian@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 13:18:40 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/29 13:42:10 by frmarian         ###   ########.fr       */
+/*   Updated: 2025/07/31 12:31:27 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static void	calc_column_bounds(t_wall *wall)
+static void	set_column_bounds(t_wall *wall)
 {
 	wall->start = (HEIGHT - wall->height) / 2;
 	wall->end = wall->start + wall->height;
@@ -44,7 +44,7 @@ void	draw_3d_cached(t_game *cub3d, int angle_column, float cos_angle,
 	cub3d->ray_data.ray = cub3d->ray_data.impact;
 	wall.height = get_wall_height(cos_angle, sin_angle,
 			cub3d->player.angle.current_angle, cub3d->ray_data);
-	calc_column_bounds(&wall);
+	set_column_bounds(&wall);
 	render_wall_column(wall_texture, cub3d, wall, angle_column);
 }
 

@@ -1,31 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   columns.c                                          :+:      :+:    :+:   */
+/*   render_columns.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frmarian <frmarian@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 13:28:00 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/29 14:12:34 by frmarian         ###   ########.fr       */
+/*   Updated: 2025/07/31 13:25:33 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static t_render_params	initialize_render_params(t_game *cub3d,
+static t_render_params	init_render_params(t_game *cub3d,
 		t_image *wall_texture, int column_index, int angle_column)
 {
 	t_render_params	params;
 
+	params.tex_pos = 0;
 	params.img_data = cub3d->image.data;
 	params.tex_data = wall_texture->data;
-	params.img_bpp_bytes = cub3d->image.bpp / 8;
-	params.tex_bpp_bytes = wall_texture->bpp / 8;
 	params.img_line_size = cub3d->image.size_line;
 	params.tex_line_size = wall_texture->size_line;
 	params.tex_height = wall_texture->height;
-	params.tex_x_offset = column_index * params.tex_bpp_bytes;
-	params.img_x_offset = angle_column * params.img_bpp_bytes;
+	params.tex_x_offset = column_index * (wall_texture->bpp / 8);
+	params.img_x_offset = angle_column * (cub3d->image.bpp / 8);
 	return (params);
 }
 
@@ -42,21 +41,19 @@ static void	copy_texture_pixel(t_render_params *params, int y, int texture_y)
 }
 
 static void	render_column_pixels(t_render_params *params, int y_start,
-		int y_end)
+			int y_end)
 {
-	int		y;
 	int		texture_y;
 	float	current_tex_pos;
 
 	current_tex_pos = params->tex_pos;
-	y = y_start;
-	while (y < y_end)
+	while (y_start < y_end)
 	{
 		texture_y = clamp_texture_coords((int)current_tex_pos,
 				params->tex_height);
-		copy_texture_pixel(params, y, texture_y);
+		copy_texture_pixel(params, y_start, texture_y);
 		current_tex_pos += params->tex_step;
-		y++;
+		y_start++;
 	}
 }
 
@@ -77,20 +74,16 @@ void	render_wall_column(t_image *wall_texture, t_game *cub3d, t_wall wall,
 		float angle_column)
 {
 	t_render_params	params;
-	t_render_params	temp;
 	int				column_index;
 	int				y_start;
 	int				y_end;
 
-	temp.tex_pos = 0;
 	column_index = get_texture_column(wall_texture, cub3d->ray_data, wall.side);
-	temp.tex_step = (float)wall_texture->height / wall.height;
-	if (wall.start < 0)
-		temp.tex_pos = (-wall.start) * temp.tex_step;
-	params = initialize_render_params(cub3d, wall_texture, column_index,
+	params = init_render_params(cub3d, wall_texture, column_index,
 			angle_column);
-	params.tex_pos = temp.tex_pos;
-	params.tex_step = temp.tex_step;
-	calc_y_bounds(wall, &y_start, &y_end);
+	params.tex_step = (float)wall_texture->height / wall.height;
+	if (wall.start < 0)
+		params.tex_pos = (-wall.start) * params.tex_step;
+	clamp_height_bounds(wall, &y_start, &y_end);
 	render_column_pixels(&params, y_start, y_end);
 }

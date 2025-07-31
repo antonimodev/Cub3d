@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frmarian <frmarian@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 10:45:38 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/29 14:19:14 by frmarian         ###   ########.fr       */
+/*   Updated: 2025/07/31 14:08:42 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,6 @@ typedef struct s_render_params
 {
 	char			*img_data;
 	char			*tex_data;
-	int				img_bpp_bytes;
-	int				tex_bpp_bytes;
 	int				img_line_size;
 	int				tex_line_size;
 	int				tex_height;
@@ -585,7 +583,7 @@ void				init_textures(t_game *cub3d);
 t_image				*select_wall_texture(t_game *cub3d, int wall_side);
 void				render_wall_column(t_image *wall_texture, t_game *cub3d,
 						t_wall wall, float angle_column);
-void				get_map_size(t_game *cub3d);
+void				store_map_size(t_game *cub3d);
 void				hooks_setup(t_game *cub3d);
 void				move_with_collision(t_game *cub3d, float delta_x,
 						float delta_y);
@@ -618,6 +616,6 @@ void	calc_impact(int side, t_coords start, t_dda_vars vars, t_ray *result);
 int	get_texture_column(t_image *wall_texture, t_ray ray_data,
 		int wall_side);
 
-void	calc_y_bounds(t_wall wall, int *y_start, int *y_end);
+void	clamp_height_bounds(t_wall wall, int *y_start, int *y_end);
 
 #endif

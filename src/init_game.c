@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_game.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frmarian <frmarian@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 10:53:23 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/29 13:42:08 by frmarian         ###   ########.fr       */
+/*   Updated: 2025/07/31 12:07:21 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,6 @@ bool	init_game(t_game *cub3d)
 			&cub3d->image.size_line, &cub3d->image.endian);
 	init_angles(&cub3d->player);
 	init_textures(cub3d);
-	get_map_size(cub3d);
-	scale_coords(&cub3d->player.coords);
 	hooks_setup(cub3d);
 	mlx_put_image_to_window(cub3d->mlx, cub3d->window, cub3d->image.ptr, 0, 0);
 	mlx_loop(cub3d->mlx);

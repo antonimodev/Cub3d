@@ -6,7 +6,7 @@
 /*   By: antonimo <antonimo@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 11:44:48 by antonimo          #+#    #+#             */
-/*   Updated: 2025/07/18 11:17:50 by antonimo         ###   ########.fr       */
+/*   Updated: 2025/07/31 11:30:20 by antonimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ bool	validate_complete_map(t_game *cub3d)
 		return (false);
 	if (!validate_map_enclosed(cub3d))
 		return (false);
+	store_map_size(cub3d);
+	scale_coords(&cub3d->player.coords);
 	return (true);
 }
 
